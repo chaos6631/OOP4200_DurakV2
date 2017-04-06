@@ -34,9 +34,7 @@ namespace DurakGameLib
 
         #region INSTANCE MEMBERS
         private Cards aiplayhand;
-        private Card humanLastCard;
         private bool isAttacker;    // Is the   attacker
-        private Suit superSuit;
         #endregion
 
         #region ACCESSORS & MUTATORS
@@ -70,32 +68,10 @@ namespace DurakGameLib
             }
         }
 
-        /// <summary>
-        /// Getter & Setter for HumanLastCard 
-        /// </summary>
-        public Card HumanLastCard
-        {
-            get
-            {
-                return humanLastCard;
-            }
-            set
-            {
-                humanLastCard = value;
-            }
-        }
+ 
 
-        public Suit SuperSuit
-        {
-            get
-            {
-                return superSuit;
-            }
-            set
-            {
-                superSuit = value;
-            }
-        }
+
+    
 
         #endregion
 
@@ -197,7 +173,7 @@ namespace DurakGameLib
         /// <summary>
         /// basic logic of ai player
         /// </summary>
-        public void BasicAILogic(Card humanLastCard)
+        public void BasicAILogic(Card humanLastCard , Card trumpCard)
         {
             if (IsAttacker == true)
             {
@@ -221,7 +197,7 @@ namespace DurakGameLib
                         AiPlayCard(aicard);
                     }
 
-                    if (humanLastCard < aicard || aicard.Suit == superSuit)
+                    if (humanLastCard < aicard || aicard.Suit == trumpCard.Suit)
                     {
                         AiPlayCard(aicard);
                     }
@@ -233,7 +209,7 @@ namespace DurakGameLib
         }
 
 
-        public void AdvancedAILogic(Card humanLastCard)
+        public void AdvancedAILogic(Card humanLastCard, Card trumpCard)
         {
             if (IsAttacker == true)
             {
@@ -257,7 +233,7 @@ namespace DurakGameLib
                         AiPlayCard(aicard);
                     }
 
-                    if (humanLastCard < aicard || aicard.Suit == superSuit)
+                    if (humanLastCard < aicard || aicard.Suit == trumpCard.Suit)
                     {
                         AdvancedEatCard(humanLastCard);
                         AiPlayCard(aicard);
