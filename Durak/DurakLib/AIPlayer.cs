@@ -7,7 +7,7 @@ using Ch13CardLib;
 
 namespace DurakGameLib
 {
-    class AIPlayer : CardsPlayed
+    class AIPlayer : Game
     {
         #region CLASS MEMBERS
 
@@ -113,73 +113,97 @@ namespace DurakGameLib
         /// Draw cards to the ai player's hand
         /// </summary>
         /// <param name="card"></param>
-        public void DrawCards(Card card)
+        public void DrawCard(Card card)
         {
             aiplayhand.Add(card); // Add each to the players hand           
         }
 
         /// <summary>
+        /// Play the minimun card.
+        /// </summary>
+        /// <param name="card"></param>
+        public void PlayMinimumCard(Card card)
+        {
+            if (card.Rank == Rank.Two)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.Three)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.Four)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.Five)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.Six)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.Seven)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.Eight)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.Nine)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.Ten)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.Jack)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.Queen)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.King)
+            {
+                AiPlayCard(card);
+            }
+            else if (card.Rank == Rank.Ace)
+            {
+                AiPlayCard(card);
+            }
+        }
+
+
+        public void AdvancedEatCard(Card card)
+        {
+            if (card.Rank == Rank.Ace)
+            {
+                DrawCard(card);
+            }
+            else if (card.Rank == Rank.King)
+            {
+                DrawCard(card);
+            }
+            else if (card.Rank == Rank.Queen)
+            {
+                DrawCard(card);
+            }
+        }
+        /// <summary>
         /// basic logic of ai player
         /// </summary>
-        public void BasicAILogic()
+        public void BasicAILogic(Card humanLastCard)
         {
             if (IsAttacker == true)
             {
                 foreach (Card aicard in AIplayhand)
                 {
-                    if (aicard.Rank == Rank.Two)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.Three)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.Four)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.Five)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.Six)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.Seven)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.Eight)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.Nine)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.Ten)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.Jack)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.Queen)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.King)
-                    {
-                        AiPlayCard(aicard);
-                    }
-                    else if (aicard.Rank == Rank.Ace)
-                    {
-                        AiPlayCard(aicard);
-                    }
-
+                    PlayMinimumCard(aicard);
                 }
             }
             else
@@ -188,21 +212,55 @@ namespace DurakGameLib
                 {
                     if (humanLastCard >= aicard)
                     {
-                        DrawCards(humanLastCard);
+                        DrawCard(humanLastCard);
                     }
 
                     if (humanLastCard < aicard || humanLastCard.Suit == aicard.Suit)
                     {
 
                         AiPlayCard(aicard);
-
                     }
 
                     if (humanLastCard < aicard || aicard.Suit == superSuit)
                     {
-
                         AiPlayCard(aicard);
+                    }
 
+                }
+
+            }
+
+        }
+
+
+        public void AdvancedAILogic(Card humanLastCard)
+        {
+            if (IsAttacker == true)
+            {
+                foreach (Card aicard in AIplayhand)
+                {
+                    PlayMinimumCard(aicard);
+                }
+            }
+            else
+            {
+                foreach (Card aicard in AIplayhand)
+                {
+                    if (humanLastCard >= aicard)
+                    {
+                        DrawCard(humanLastCard);
+                    }
+
+                    if (humanLastCard < aicard || humanLastCard.Suit == aicard.Suit)
+                    {
+                        AdvancedEatCard(humanLastCard);
+                        AiPlayCard(aicard);
+                    }
+
+                    if (humanLastCard < aicard || aicard.Suit == superSuit)
+                    {
+                        AdvancedEatCard(humanLastCard);
+                        AiPlayCard(aicard);
                     }
 
                 }
