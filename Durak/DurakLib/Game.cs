@@ -92,6 +92,10 @@ namespace DurakGameLib
             {
                 return gameDeck;
             }
+            set
+            {
+                gameDeck = value;
+            }
         }
 
         #endregion

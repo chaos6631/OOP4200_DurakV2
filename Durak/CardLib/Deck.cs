@@ -9,7 +9,7 @@ namespace Ch13CardLib
     public class Deck : ICloneable
     {
         #region MEMBERS AND PROPERTIES
-        private Cards cards = new Cards();
+        protected Cards cards = new Cards();
 
         public Cards Cards
         {
