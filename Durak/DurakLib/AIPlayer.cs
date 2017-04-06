@@ -7,12 +7,11 @@ using Ch13CardLib;
 
 namespace DurakGameLib
 {
-    class AIPlayer : Game
+    class AIPlayer : Player
     {
         #region CLASS MEMBERS
 
-
-
+        string AI_PLAYER_NAME = "AI Player";
 
         #endregion
 
@@ -23,227 +22,177 @@ namespace DurakGameLib
         /// </summary>
         public AIPlayer()
         {
-
-            aiplayhand = new Cards();   // The ia player cards as a hand
-
-
+            new Player(AI_PLAYER_NAME);
         }
         #endregion
 
-
-
         #region INSTANCE MEMBERS
-        private Cards aiplayhand;
-        private bool isAttacker;    // Is the   attacker
+        private Suit trumpCardSuit;
+        private Card humanLastCard;
+
         #endregion
 
         #region ACCESSORS & MUTATORS
-        /// <summary>
-        /// Getter & Setter for AIplayhand
-        /// </summary>
-        public Cards AIplayhand
-        {
-            get
-            {
-                return aiplayhand; // Returns the ai hand of cards
-            }
-            set
-            {
-                aiplayhand = value; // Sets the ai hand of cards
-            }
-        }
-
-        /// <summary>
-        /// Getter & Setter for   Isattacker 
-        /// </summary>
-        public bool IsAttacker
-        {
-            get
-            {
-                return isAttacker;
-            }
-            set
-            {
-                isAttacker = value;
-            }
-        }
-
- 
-
-
-    
 
         #endregion
 
         #region METHODS
-        /// <summary>
-        /// remove card from ai player's hand
-        /// </summary>
-        /// <param name="card"></param>
-        public void AiPlayCard(Card card)
-        {
-            aiplayhand.Remove(card); // Removes the card played from the ai hand
-        }
 
         /// <summary>
-        /// Draw cards to the ai player's hand
+        /// Getter & Setter from Trump Card Suit
         /// </summary>
-        /// <param name="card"></param>
-        public void DrawCard(Card card)
+        public Suit TrumpCardSuit
         {
-            aiplayhand.Add(card); // Add each to the players hand           
+            get { return trumpCardSuit; } 
+            set { trumpCardSuit = value; } 
         }
 
         /// <summary>
-        /// Play the minimun card.
+        /// Getter & Setter for the human's last card
+        /// </summary>
+        public Card HumanLastCard
+        {
+            get { return humanLastCard; }
+
+            set { humanLastCard = value; }
+        }
+
+        /// <summary>
+        /// Returns the minimun card.
         /// </summary>
         /// <param name="card"></param>
-        public void PlayMinimumCard(Card card)
+        public Card FindMinimumCard(Card card, Card minimumCard)
         {
-            if (card.Rank == Rank.Two)
+
+            if (card < minimumCard)
             {
-                AiPlayCard(card);
+                minimumCard = card;
             }
-            else if (card.Rank == Rank.Three)
-            {
-                AiPlayCard(card);
-            }
-            else if (card.Rank == Rank.Four)
-            {
-                AiPlayCard(card);
-            }
-            else if (card.Rank == Rank.Five)
-            {
-                AiPlayCard(card);
-            }
-            else if (card.Rank == Rank.Six)
-            {
-                AiPlayCard(card);
-            }
-            else if (card.Rank == Rank.Seven)
-            {
-                AiPlayCard(card);
-            }
-            else if (card.Rank == Rank.Eight)
-            {
-                AiPlayCard(card);
-            }
-            else if (card.Rank == Rank.Nine)
-            {
-                AiPlayCard(card);
-            }
-            else if (card.Rank == Rank.Ten)
-            {
-                AiPlayCard(card);
-            }
-            else if (card.Rank == Rank.Jack)
-            {
-                AiPlayCard(card);
-            }
-            else if (card.Rank == Rank.Queen)
-            {
-                AiPlayCard(card);
-            }
-            else if (card.Rank == Rank.King)
-            {
-                AiPlayCard(card);
-            }
-            else if (card.Rank == Rank.Ace)
-            {
-                AiPlayCard(card);
-            }
+
+            return minimumCard;
         }
 
-
-        public void AdvancedEatCard(Card card)
-        {
-            if (card.Rank == Rank.Ace)
-            {
-                DrawCard(card);
-            }
-            else if (card.Rank == Rank.King)
-            {
-                DrawCard(card);
-            }
-            else if (card.Rank == Rank.Queen)
-            {
-                DrawCard(card);
-            }
-        }
         /// <summary>
         /// basic logic of ai player
         /// </summary>
-        public void BasicAILogic(Card humanLastCard , Card trumpCard)
+        public void BasicAILogic()
         {
-            if (IsAttacker == true)
+            if (IsAttacker == true) // If the AI player is attacking
             {
-                foreach (Card aicard in AIplayhand)
+                Card minimumCard = new Card();
+                bool isFirstLoop = true;
+                foreach (Card aicard in PlayerHand) // Loop through the AI Player's Hand
                 {
-                    PlayMinimumCard(aicard);
+                    if (isFirstLoop)
+                    {
+                        minimumCard = aicard;
+                        isFirstLoop = false;
+                    }
+                   
+                    minimumCard = FindMinimumCard(aicard, minimumCard); // find the minimum card
                 }
+
+                PlayCard(minimumCard); // Play the minimum card
             }
             else
             {
-                foreach (Card aicard in AIplayhand)
+                Boolean aiLoses = true;
+                Card cardToPlay = new Card(); 
+                foreach (Card aicard in PlayerHand)
                 {
-                    if (humanLastCard >= aicard)
+                    cardToPlay = aicard;
+
+                    if (aiLoses)
                     {
-                        DrawCard(humanLastCard);
+                        if (humanLastCard <= aicard)
+                        {
+                            aiLoses = false;
+                        }
+
+                        if (humanLastCard < aicard && humanLastCard.Suit == aicard.Suit)
+                        {
+                            aiLoses = false;
+                        }
+
+                        else if (humanLastCard < aicard && aicard.Suit == trumpCardSuit)
+                        {
+                            aiLoses = false;
+                        }
                     }
 
-                    if (humanLastCard < aicard || humanLastCard.Suit == aicard.Suit)
-                    {
+                }
 
-                        AiPlayCard(aicard);
-                    }
-
-                    if (humanLastCard < aicard || aicard.Suit == trumpCard.Suit)
-                    {
-                        AiPlayCard(aicard);
-                    }
-
+                if(aiLoses)
+                {
+                    TakeFromDeck(humanLastCard);
+                } else
+                {
+                    PlayCard(cardToPlay);
                 }
 
             }
 
         }
 
-
-        public void AdvancedAILogic(Card humanLastCard, Card trumpCard)
+        public void AdvancedAILogic()
         {
             if (IsAttacker == true)
             {
-                foreach (Card aicard in AIplayhand)
+                Card minimumCard = new Card();
+                bool isFirstLoop = true;
+                foreach (Card aicard in PlayerHand) // Loop through the AI Player's Hand
                 {
-                    PlayMinimumCard(aicard);
+                    if (isFirstLoop)
+                    {
+                        minimumCard = aicard;
+                        isFirstLoop = false;
+                    }
+
+                    minimumCard = FindMinimumCard(aicard, minimumCard); // find the minimum card
                 }
+
+                PlayCard(minimumCard); // Play the minimum card
             }
             else
             {
-                foreach (Card aicard in AIplayhand)
+                Boolean aiLoses = true;
+                Card cardToPlay = new Card();
+                foreach (Card aicard in PlayerHand)
                 {
-                    if (humanLastCard >= aicard)
-                    {
-                        DrawCard(humanLastCard);
-                    }
+                    cardToPlay = aicard;
 
-                    if (humanLastCard < aicard || humanLastCard.Suit == aicard.Suit)
+                    if (aiLoses)
                     {
-                        AdvancedEatCard(humanLastCard);
-                        AiPlayCard(aicard);
-                    }
+                        if (humanLastCard <= aicard)
+                        {
+                            aiLoses = false;
+                        }
 
-                    if (humanLastCard < aicard || aicard.Suit == trumpCard.Suit)
-                    {
-                        AdvancedEatCard(humanLastCard);
-                        AiPlayCard(aicard);
+                        if (humanLastCard < aicard && humanLastCard.Suit == aicard.Suit)
+                        {
+                            aiLoses = false;
+                        }
+
+                        else if (humanLastCard < aicard && aicard.Suit == trumpCardSuit)
+                        {
+                            aiLoses = false;
+                        }
                     }
 
                 }
 
+                if (aiLoses)
+                {
+                    TakeFromDeck(humanLastCard);
+                }
+                else
+                {
+                    PlayCard(cardToPlay);
+                }
+
             }
+        }
 
         }
         #endregion
     }
-}
