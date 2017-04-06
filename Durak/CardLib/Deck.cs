@@ -9,7 +9,19 @@ namespace Ch13CardLib
     public class Deck : ICloneable
     {
         #region MEMBERS AND PROPERTIES
-        protected Cards cards = new Cards();
+        private Cards cards = new Cards();
+
+        public Cards Cards
+        {
+            get
+            {
+                return cards;
+            }
+            set
+            {
+                this.cards = value;
+            }
+        }
         #endregion
 
         #region EVENT HANDLERS
@@ -30,7 +42,7 @@ namespace Ch13CardLib
             {
                 for (int rankVal = 1; rankVal < 14; rankVal++)
                 {
-                    cards.Add(new Card((Suit)suitVal, (Rank)rankVal));
+                    Cards.Add(new Card((Suit)suitVal, (Rank)rankVal));
                 }
             }
         }
@@ -92,13 +104,13 @@ namespace Ch13CardLib
         /// <returns></returns>
         public object Clone()
         {
-            Deck newDeck = new Deck(cards.Clone() as Cards);
+            Deck newDeck = new Deck(Cards.Clone() as Cards);
             return newDeck;
         }
 
         public Card GetCard()
         {
-            int cardCount = cards.Count;
+            int cardCount = Cards.Count;
             return this.GetCard(cardCount);
         }
 
@@ -113,11 +125,11 @@ namespace Ch13CardLib
             {
                 if ((cardNum == 0) && (LastCardDrawn != null))
                     LastCardDrawn(this, EventArgs.Empty);
-                return cards[cardNum];
+                return Cards[cardNum];
             }
             else
             {
-                throw new CardOutOfRangeException(cards.Clone() as Cards);
+                throw new CardOutOfRangeException(Cards.Clone() as Cards);
             }
                 
             
@@ -143,9 +155,9 @@ namespace Ch13CardLib
                         foundCard = true;
                 }
                 assigned[sourceCard] = true;
-                newDeck.Add(cards[sourceCard]);
+                newDeck.Add(Cards[sourceCard]);
             }
-            newDeck.CopyTo(cards);
+            newDeck.CopyTo(Cards);
         }
         #endregion
     }

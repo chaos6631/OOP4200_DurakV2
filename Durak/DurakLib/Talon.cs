@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace DurakGameLib
 {
-    class Talon : Deck
+    public class Talon : Deck
     {
         /// <summary>
         /// Default Constructor
@@ -67,6 +67,10 @@ namespace DurakGameLib
                 }
             }
         }
-              
+           
+        public int RemainingCardCount()
+        {
+            return this.Cards.Count();
+        }   
     }
 }

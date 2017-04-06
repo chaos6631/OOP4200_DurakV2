@@ -9,7 +9,7 @@ using Ch13CardLib;
 
 namespace DurakGameLib
 {
-    class Game
+    public class Game
     {
         #region CLASS MEMBERS
         // Max players
@@ -86,11 +86,21 @@ namespace DurakGameLib
             }
         }
 
+        public Talon GameDeck
+        {
+            get
+            {
+                return gameDeck;
+            }
+        }
+
         #endregion
 
         #region EVENTS, EVENT HANDLERS, DELEGATES
         public delegate void HumanPlayerTurn();
         public event HumanPlayerTurn PlayHumanTurn;
+        public delegate void PlayerHasGoneOut();
+        public event PlayerHasGoneOut PlayerWin;
 
 
         #endregion
@@ -103,22 +113,28 @@ namespace DurakGameLib
         /// </summary>
         public void PlayNextRound()
         {
+            bool roundContinue = true;
 
-            //// Decide which player goes first
-            if (IsHumanAttacker())
+            while(roundContinue)
             {
-                //// human is attacker               
-                if (PlayerTurn(HumanPlayer))
+                //// Decide which player goes first
+                if (IsHumanAttacker())
                 {
-
+                    //// human is attacker               
+                    if (!PlayerTurn(HumanPlayer))
+                    {
+                        roundContinue = false;
+                    }
                 }
-            }
-            else
-            {
-                //// copmuter is attacker
-                //// trigger computer players select cards event function
-                
-            }            
+                else
+                {
+                    //// copmuter is attacker               
+                    if (!PlayerTurn(ComputerPlayer))
+                    {
+                        roundContinue = false;
+                    }
+                }
+            }                        
         }
 
         /// <summary>
@@ -132,7 +148,7 @@ namespace DurakGameLib
             bool played = false;
             int cardIndex = 0;      // equals selected card
             //// trigger human players select card event function
-            // select card to play
+            // selected card to play is set to card index
             if (IsCardPlayable(attacker.PlayerHand.ElementAt(cardIndex)))
             {
                 attacker.PlayCard(attacker.PlayerHand.ElementAt(cardIndex));
@@ -190,15 +206,15 @@ namespace DurakGameLib
                 int deckSize = 36;              // should come from event
 
                 //// Initialize Deck and Deal cards
-                this.gameDeck = new Talon();
+                this.GameDeck = new Talon();
 
                 //// Set deck to required size                
-                this.gameDeck.SetDeckSize(deckSize);
+                this.GameDeck.SetDeckSize(deckSize);
 
                 //// Deal cards to players
                 DealCards();
                 //// Set trump card
-                gameTrumpCard = gameDeck.GetCard();
+                gameTrumpCard = GameDeck.GetCard();
             }
             catch (Exception)
             {
@@ -209,7 +225,10 @@ namespace DurakGameLib
         /// <summary>
         /// End the current game
         /// </summary>
-        public void EndGame() { }
+        public void EndGame()
+        {
+
+        }
         
         /// <summary>
         /// IsHumanAttacker
@@ -275,8 +294,8 @@ namespace DurakGameLib
             {
                 for (int i = 1; i <= INITIAL_PLAYER_CARD_COUNT; i++)
                 {
-                    humanPlayer.TakeFromDeck(gameDeck.GetCard());
-                    computerPlayer.TakeFromDeck(gameDeck.GetCard());
+                    humanPlayer.TakeFromDeck(GameDeck.GetCard());
+                    computerPlayer.TakeFromDeck(GameDeck.GetCard());
                 }
             }
             else
@@ -285,12 +304,12 @@ namespace DurakGameLib
                 if (HumanPlayer.IsAttacker)
                     for (int i = ComputerPlayer.PlayerHand.Count; i <= INITIAL_PLAYER_CARD_COUNT; i++)
                     {
-                        ComputerPlayer.TakeFromDeck(gameDeck.GetCard());
+                        ComputerPlayer.TakeFromDeck(GameDeck.GetCard());
                     }
                 else
                     for (int i = HumanPlayer.PlayerHand.Count; i <= INITIAL_PLAYER_CARD_COUNT; i++)
                     {
-                        HumanPlayer.TakeFromDeck(gameDeck.GetCard());
+                        HumanPlayer.TakeFromDeck(GameDeck.GetCard());
                     }
             }
         }
