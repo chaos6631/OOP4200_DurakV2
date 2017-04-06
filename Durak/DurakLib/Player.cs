@@ -38,6 +38,7 @@ namespace DurakGameLib
         private bool isAttacker;            // Is the player the attacker 
         private int gamesWon;               // The number of games won by this player
         private int handsWon;               // The number of hands won by this player
+        private bool isPlayable;                  // true is play, pass is false
 
         #endregion
 
@@ -163,6 +164,15 @@ namespace DurakGameLib
         {
             get { return isAttacker; }
             set { isAttacker = value; }
+        }
+
+        /// <summary>
+        /// Getter & Setter for if the player wants to pass or play the round out
+        /// </summary>
+        public bool IsPlayable
+        {
+            get { return isPlayable; }
+            set { isPlayable = value; }
         }
         #endregion
     }
