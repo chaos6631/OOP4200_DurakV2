@@ -13,7 +13,8 @@ namespace DurakGameLib
         /// to be used by aiplayer to make decisions.
         /// this should be set when a human player plays a card, and it is added to the CardsPlayed object
         /// </summary>
-        Card humanLastCardPlayed;        
+        Card humanLastCardPlayed;
+        Card computerLastCardPlayed;     
         
 
         public Card HumanLastCardPlayed
@@ -28,5 +29,7 @@ namespace DurakGameLib
                 humanLastCardPlayed = value;
             }
         }
+                
     }
+
 }

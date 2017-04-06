@@ -101,30 +101,37 @@ namespace DurakGameLib
         ///  - Should be called when PlayRound_event
         /// </summary>
         public void PlayNextRound()
-        {        
-
+        {
+            
             //// Decide which player goes first
             if (IsHumanAttacker())
             {
-                //// trigger human players select cards to play function
+                //// human is attacker
+                //// trigger human players select card event function
+               
             }
             else
             {
-                //// trigger computer players play card function
-            }
-
+                //// copmuter is attacker
+                //// trigger computer players select cards event function
+                
+            }            
         }
 
         /// <summary>
         /// 
-        /// NOT SURE IF THIS WILL BE REQUIRED Individual players actions
+        ///
         /// </summary>
-        public void PlayerRound()
+        /// <param name="attacker"></param>
+        /// <param name="defender"></param>
+        public bool PlayerTurn(Player attacker, Player defender)
         {
-            // select cards to play
-            // play cards
-            // opposite player chooses cards to play
-                // if opposite player chooses to pass, opposite player picks up cards
+            bool played = false;
+            // select card to play
+            attacker.PlayCard(attacker.PlayerHand.ElementAt(0));
+            // play card, set played to true
+            // 
+            return played;
         }
 
         /// <summary>
@@ -145,7 +152,7 @@ namespace DurakGameLib
                 this.gameDeck.SetDeckSize(deckSize);
 
                 //// Deal cards to players
-                
+                DealCards();
                 //// Set trump card
                 gameTrumpCard = gameDeck.GetCard();
             }
@@ -168,9 +175,12 @@ namespace DurakGameLib
         /// </summary>
         /// <returns>True if human is attacker, false if not</returns>
         public bool IsHumanAttacker()
-        {            
+        {        
+            //// Check if it is the first deal of the game    
             if (humanPlayer.IsAttacker == false && computerPlayer.IsAttacker == false)
             {
+                //// Default if neither player has any trump
+                humanPlayer.IsAttacker = true;          
                 //// Player with lowest trump is the attacker                
                 foreach (Card humanCard in humanPlayer.PlayerHand)
                 {
@@ -181,16 +191,32 @@ namespace DurakGameLib
                             if (computerCard.Suit == gameTrumpCard.Suit
                                 && computerCard.Rank < humanCard.Rank)
                             {
-                                HumanPlayer.IsAttacker = true;                                
+                                // Human has higher trump card than computer, computer is attacker
+                                computerPlayer.IsAttacker = true;
+                                HumanPlayer.IsAttacker = false;
+                            }
+                            else if(computerCard.Suit == gameTrumpCard.Suit
+                                && computerCard.Rank > humanCard.Rank)
+                            {
+                                // copmuter has higher trump card than human, human is attacker
+                                HumanPlayer.IsAttacker = true;
+                                computerPlayer.IsAttacker = false;
                             }
                         }
                     }
                 }
             }
-            else if (computerPlayer.IsAttacker == true)                            
+            else if (computerPlayer.IsAttacker == true)
+            {
                 HumanPlayer.IsAttacker = true;                  // human plays as attacker
+                computerPlayer.IsAttacker = false;
+            }    
             else
+            {
                 HumanPlayer.IsAttacker = false;                 // computer plays as attacker
+                computerPlayer.IsAttacker = true;
+            }
+            
 
             return HumanPlayer.IsAttacker;
         }

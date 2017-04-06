@@ -59,7 +59,7 @@ namespace DurakGameLib
         {
             this.cards.Clear();         // Delete all card objects from deck if there are any inside
 
-            for (Suit suitVal = Suit.Club; suitVal < Suit.Spade; suitVal++)
+            for (Suit suitVal = Suit.Clubs; suitVal < Suit.Spades; suitVal++)
             {
                 for (Rank rankVal = minRank; rankVal <= Rank.Ace; rankVal++)
                 {
