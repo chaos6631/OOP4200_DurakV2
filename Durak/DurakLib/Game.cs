@@ -125,25 +125,25 @@ namespace DurakGameLib
                 if (IsHumanAttacker())
                 {
                     //// human is attacker     
-                    // if(HumanPlayer.WishesToPlay)
-                    //{
-                    if (!PlayerTurn(HumanPlayer))
+                    if (HumanPlayer.IsPlayable)
+                    {
+                        if (!PlayerTurn(HumanPlayer))
                     {
                         roundContinue = false;
                     }
-                    //}          
+                    }
 
                 }
                 else
                 {
                     //// copmuter is attacker   
-                    //if (ComputerPlayer.WishesToPlay)
-                    //{
-                    if (!PlayerTurn(ComputerPlayer))
+                    if (ComputerPlayer.IsPlayable)
+                    {
+                        if (!PlayerTurn(ComputerPlayer))
                     {
                         roundContinue = false;
                     }
-                    //}            
+                    }
 
                 }
 
@@ -169,14 +169,22 @@ namespace DurakGameLib
             bool played = false;
             int cardIndex = 0;      // equals selected card
                                     //// trigger human players select card event function
-            Console.WriteLine("Which card do you wish to play?");                           
-            cardIndex = Console.Read();
-            // selected card to play is set to card index
-            if (IsCardPlayable(attacker.PlayerHand.ElementAt(cardIndex)))
+            Console.WriteLine("Do you wish to pass?");
+            string answer = Console.ReadLine();
+            answer = answer.ToLower();
+            if (answer == "n")
             {
-                attacker.PlayCard(attacker.PlayerHand.ElementAt(cardIndex));
-                played = true;
+                Console.WriteLine("Which card do you wish to play?");
+                cardIndex = Console.Read();
+                // selected card to play is set to card index
+                if (IsCardPlayable(attacker.PlayerHand.ElementAt(cardIndex)))
+                {
+                    attacker.PlayCard(attacker.PlayerHand.ElementAt(cardIndex));
+                    played = true;
+                }
             }
+            
+            
             
             // PLAYCARD NEEDS TO BE CHANGED TO RETURN THE CARD in the player class
             // play card, set played to true
