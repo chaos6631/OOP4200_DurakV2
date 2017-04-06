@@ -7,7 +7,7 @@ using Ch13CardLib;
 
 namespace DurakGameLib
 {
-    class CardsPlayed : Cards
+    class CardsPlayed : Stack<Card>
     {
         /// <summary>
         /// to be used by aiplayer to make decisions.
@@ -29,7 +29,19 @@ namespace DurakGameLib
                 humanLastCardPlayed = value;
             }
         }
-                
+
+        public Card ComputerLastCardPlayed
+        {
+            get
+            {
+                return computerLastCardPlayed;
+            }
+
+            set
+            {
+                computerLastCardPlayed = value;
+            }
+        }
     }
 
 }

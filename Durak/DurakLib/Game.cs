@@ -33,6 +33,7 @@ namespace DurakGameLib
         private Player computerPlayer;
         private Talon gameDeck;
         private Card gameTrumpCard;
+        private CardsPlayed playedCards;
 
         #endregion
 
@@ -102,13 +103,15 @@ namespace DurakGameLib
         /// </summary>
         public void PlayNextRound()
         {
-            
+
             //// Decide which player goes first
             if (IsHumanAttacker())
             {
-                //// human is attacker
-                //// trigger human players select card event function
-               
+                //// human is attacker               
+                if (PlayerTurn(HumanPlayer))
+                {
+
+                }
             }
             else
             {
@@ -124,14 +127,55 @@ namespace DurakGameLib
         /// </summary>
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
-        public bool PlayerTurn(Player attacker, Player defender)
+        public bool PlayerTurn(Player attacker)
         {
             bool played = false;
+            int cardIndex = 0;      // equals selected card
+            //// trigger human players select card event function
             // select card to play
-            attacker.PlayCard(attacker.PlayerHand.ElementAt(0));
+            if (IsCardPlayable(attacker.PlayerHand.ElementAt(cardIndex)))
+            {
+                attacker.PlayCard(attacker.PlayerHand.ElementAt(cardIndex));
+                played = true;
+            }
+            
+            // PLAYCARD NEEDS TO BE CHANGED TO RETURN THE CARD in the player class
             // play card, set played to true
             // 
             return played;
+        }
+
+        /// <summary>
+        /// Checks to see if the players card can actually be played
+        /// </summary>
+        /// <param name="playerCard">The card being checked against the last card played by the other player</param>
+        /// <returns>True if card can be played, false if not</returns>
+        public bool IsCardPlayable(Card playerCard)
+        {
+            bool isPlayable = false;
+            
+            //// Is card Trump, if so are both cards trump cards
+            if (playerCard.Suit == GameTrumpCard.Suit)
+            {
+                if((playerCard.Suit == GameTrumpCard.Suit &&
+                playedCards.Last().Suit == GameTrumpCard.Suit))
+                {
+                    if (playerCard.Rank > playedCards.Last().Rank)
+                    {
+                        isPlayable = true;
+                    }
+                }
+                else
+                {
+                    isPlayable = true;
+                }
+            }
+            //// Is card of higher value than other players card
+            else if (playerCard.Rank > playedCards.Last().Rank)
+            {
+                isPlayable = true;
+            }
+            return isPlayable;
         }
 
         /// <summary>
