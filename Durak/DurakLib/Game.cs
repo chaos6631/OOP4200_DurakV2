@@ -124,16 +124,33 @@ namespace DurakGameLib
                 //// Decide which player goes first
                 if (IsHumanAttacker())
                 {
-                    //// human is attacker               
+                    //// human is attacker     
+                    // if(HumanPlayer.WishesToPlay)
+                    //{
                     if (!PlayerTurn(HumanPlayer))
                     {
                         roundContinue = false;
                     }
+                    //}          
+
                 }
                 else
                 {
-                    //// copmuter is attacker               
+                    //// copmuter is attacker   
+                    //if (ComputerPlayer.WishesToPlay)
+                    //{
                     if (!PlayerTurn(ComputerPlayer))
+                    {
+                        roundContinue = false;
+                    }
+                    //}            
+
+                }
+
+                //// Check if deck is empty and if a player is out of cards
+                if (GameDeck.RemainingCardCount() == 0)
+                {
+                    if (HumanPlayer.PlayerHand.Count == 0 || ComputerPlayer.PlayerHand.Count == 0)
                     {
                         roundContinue = false;
                     }
@@ -142,16 +159,18 @@ namespace DurakGameLib
         }
 
         /// <summary>
-        /// 
+        /// Calls actions related to a players turn
         ///
         /// </summary>
-        /// <param name="attacker"></param>
-        /// <param name="defender"></param>
+        /// <param name="attacker">The player who is an attacker</param>
+        
         public bool PlayerTurn(Player attacker)
         {
             bool played = false;
             int cardIndex = 0;      // equals selected card
-            //// trigger human players select card event function
+                                    //// trigger human players select card event function
+            Console.WriteLine("Which card do you wish to play?");                           
+            cardIndex = Console.Read();
             // selected card to play is set to card index
             if (IsCardPlayable(attacker.PlayerHand.ElementAt(cardIndex)))
             {
