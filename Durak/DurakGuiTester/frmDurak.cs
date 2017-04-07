@@ -86,6 +86,7 @@ namespace DurakGuiTester
         private void frmDurak_Load(object sender, EventArgs e)
         {
             #region Get Player Name/Deck Size
+            //THIS IS HANDLED IN CONSTRUCTOR
             //Create frmStartup to retrieve player info
             //Form playerDetails = new frmStartup();
             //playerDetails.ShowDialog();
@@ -93,21 +94,21 @@ namespace DurakGuiTester
             #endregion
 
                        
-            //THESE SHOULD BE HANDLED IN GAME 
+            //THESE ARE HANDLED IN GAME OBJECT
             //Create Player
             //DurakGameLib.Player playerOne = new DurakGameLib.Player(name);
             //Create Opponent
             //DurakGameLib.Player opponent = new DurakGameLib.Player("cpu");
 
-            //Create/Start Game
+            // CREATE/START GAME
             DurakGameLib.Game myGame = new DurakGameLib.Game(PlayerName, OpponentName);
-            myGame.StartGame(TalonSize);
+            myGame.StartGame(TalonSize); // CARDS ARE DEALT AND TRUMPCARD IS DECIDED
 
             #region Populate Starting Display Controls
-            //Names
+            // SET NAMES
             lblPlayerName.Text = PlayerName;
             lblOpponentName.Text = OpponentName;
-            //Roles
+            // UPDATE PLAYER LABELS IN FORM
             if (myGame.HumanPlayer.IsAttacker)
             {
                 lblPlayerRole.Text = "Attacker";
@@ -129,6 +130,10 @@ namespace DurakGuiTester
             trumpCardDisplay.Card = myGame.GameTrumpCard;
             //trumpCardDisplay.FaceUp = true;
             trumpCardDisplay.Show();
+
+            // NEED TO POPULATE PLAYERS CARDS IN THE FORM HERE
+
+            // TRIGGER ATTACKERS CARD SELECTION METHOD
 
             #endregion
         }
