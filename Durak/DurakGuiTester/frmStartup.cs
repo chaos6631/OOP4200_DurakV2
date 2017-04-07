@@ -43,6 +43,10 @@ namespace DurakGuiTester
                 //Deck
                 talonSize = Convert.ToInt32(lbxDeckSize.SelectedItem);
 
+
+                //// CREATE THE GAME FORM HERE PASSING THE INPUT VALUES IN CONSTRUCTOR
+                frmDurak newForm = new frmDurak(playerName, talonSize);
+                newForm.Show();
             }
             catch (Exception ex)
             {

@@ -12,15 +12,77 @@ namespace DurakGuiTester
 {
     public partial class frmDurak : Form
     {
+        #region FIELDS & PROPS
         private string playerName;   // this should be set in forms constructor, value is passed by frmStartup
-        private int deckSize;        // this should be set in forms constructor, value is passed by frmStartup
+        private string opponentName = "CPU";
+        private int talonSize;        // this should be set in forms constructor, value is passed by frmStartup
+        #endregion
 
+        #region ACCESSORS & MUTATORS
+        public string PlayerName
+        {
+            get
+            {
+                return playerName;
+            }
 
+            set
+            {
+                playerName = value;
+            }
+        }
+
+        public string OpponentName
+        {
+            get
+            {
+                return opponentName;
+            }
+
+            set
+            {
+                opponentName = value;
+            }
+        }
+
+        public int TalonSize
+        {
+            get
+            {
+                return talonSize;
+            }
+
+            set
+            {
+                talonSize = value;
+            }
+        }
+
+        #endregion
+
+        #region CONSTRUCTORS
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public frmDurak()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Parameterized Constructor
+        /// </summary>
+        /// <param name="playerName">players name set in frmStartup</param>
+        /// <param name="talonSize">deck size set in frmStartup</param>
+        public frmDurak(string playerName, int talonSize)
+        {
+            InitializeComponent();
+            this.PlayerName = playerName;
+            this.TalonSize = talonSize;
+        }
+        #endregion
+
+        #region EVENT HANDLERS
         private void frmDurak_Load(object sender, EventArgs e)
         {
             #region Get Player Name/Deck Size
@@ -30,9 +92,7 @@ namespace DurakGuiTester
             
             #endregion
 
-
-            string name = frmStartup.playerName; // should come from constructor
-            int talonSize = frmStartup.talonSize;
+                       
             //THESE SHOULD BE HANDLED IN GAME 
             //Create Player
             //DurakGameLib.Player playerOne = new DurakGameLib.Player(name);
@@ -40,13 +100,13 @@ namespace DurakGuiTester
             //DurakGameLib.Player opponent = new DurakGameLib.Player("cpu");
 
             //Create/Start Game
-            DurakGameLib.Game myGame = new DurakGameLib.Game(playerName, "cpu");
-            myGame.StartGame(talonSize);
+            DurakGameLib.Game myGame = new DurakGameLib.Game(PlayerName, OpponentName);
+            myGame.StartGame(TalonSize);
 
             #region Populate Starting Display Controls
             //Names
-            lblPlayerName.Text = name;
-            lblOpponentName.Text = "CPU";
+            lblPlayerName.Text = PlayerName;
+            lblOpponentName.Text = OpponentName;
             //Roles
             if (myGame.HumanPlayer.IsAttacker)
             {
@@ -73,6 +133,10 @@ namespace DurakGuiTester
             #endregion
         }
 
+
+        #endregion
+
+        #region METHODS
         /// <summary>
         /// When the number of cards in the deck reaches 0, hide the talon
         /// </summary>
@@ -92,6 +156,6 @@ namespace DurakGuiTester
             }
         }
 
-        
+        #endregion
     }
 }
