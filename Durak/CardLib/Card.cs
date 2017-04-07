@@ -13,7 +13,7 @@ using System.Threading.Tasks;
  * Byron Knoll: http://code.google.com/p/vector-playing-cards/
  */
 
-namespace Ch13CardLib
+namespace CardLib
 {
     public class Card : ICloneable
     {

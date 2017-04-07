@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Ch13CardLib.Properties {
+namespace CardLib.Properties {
     using System;
     
     

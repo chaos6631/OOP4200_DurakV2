@@ -1,12 +1,12 @@
 ﻿/*  Talon.cs 
- *  Description - Represents a deck of cards in Durak, inherits from Deck class (Ch13CardLib)
+ *  Description - Represents a deck of cards in Durak, inherits from Deck class (CardLib)
  *                Talon
  *  Author  : Chris Calder     
  *  Version : 1.0    
  *  Since   : 1.0 , Feb 2017
  *  
  */
-using Ch13CardLib;
+using CardLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;

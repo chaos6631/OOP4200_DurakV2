@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Ch13CardLib.Card card1 = new Ch13CardLib.Card();
+            CardLib.Card card1 = new CardLib.Card();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDurak));
             this.pnlOpponent = new System.Windows.Forms.Panel();
             this.lblOpponentRole = new System.Windows.Forms.Label();
@@ -132,17 +132,17 @@
             // cardTopDeck
             // 
             card1.FaceUp = false;
-            card1.Rank = Ch13CardLib.Rank.Joker;
-            card1.Suit = Ch13CardLib.Suit.Clubs;
+            card1.Rank = CardLib.Rank.Joker;
+            card1.Suit = CardLib.Suit.Clubs;
             this.cardTopDeck.Card = card1;
             this.cardTopDeck.CardOrientation = System.Windows.Forms.Orientation.Vertical;
             this.cardTopDeck.Enabled = false;
             this.cardTopDeck.FaceUp = false;
             this.cardTopDeck.Location = new System.Drawing.Point(132, 12);
             this.cardTopDeck.Name = "cardTopDeck";
-            this.cardTopDeck.Rank = Ch13CardLib.Rank.Joker;
+            this.cardTopDeck.Rank = CardLib.Rank.Joker;
             this.cardTopDeck.Size = new System.Drawing.Size(80, 100);
-            this.cardTopDeck.Suit = Ch13CardLib.Suit.Clubs;
+            this.cardTopDeck.Suit = CardLib.Suit.Clubs;
             this.cardTopDeck.TabIndex = 3;
             // 
             // lblOpponentName

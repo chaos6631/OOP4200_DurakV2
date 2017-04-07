@@ -6,7 +6,7 @@
  * Since : 1.0, Feb 2017
  */
 
-using Ch13CardLib;
+using CardLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;

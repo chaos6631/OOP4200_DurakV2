@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ch13CardLib
+namespace CardLib
 {
     /// <summary>
     /// Exception for when a name provided is out of range

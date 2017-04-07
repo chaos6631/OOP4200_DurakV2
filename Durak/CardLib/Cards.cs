@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ch13CardLib
+namespace CardLib
 {
     public class Cards : List<Card>, ICloneable
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ch13CardLib
+namespace CardLib
 {
     public class Deck : ICloneable
     {
@@ -27,8 +27,7 @@ namespace Ch13CardLib
         #region EVENT HANDLERS
         public event EventHandler LastCardDrawn;
         #endregion
-
-
+        
         #region CONSTRUCTORS
 
 
@@ -108,17 +107,21 @@ namespace Ch13CardLib
             return newDeck;
         }
 
+        /// <summary>
+        /// GetCard()
+        /// </summary>
+        /// <returns>The card off the top of the stack</returns>
         public Card GetCard()
         {
             int cardCount = Cards.Count;
-            return this.GetCard(cardCount);
+            return this.GetCard(cardCount - 1);
         }
 
         /// <summary>
-        /// 
+        /// GetCard(cardNum)
         /// </summary>
-        /// <param name="cardNum"></param>
-        /// <returns></returns>
+        /// <param name="cardNum">Index of the card wanted</param>
+        /// <returns>The card at the passed index</returns>
         protected Card GetCard(int cardNum)
         {
             if (cardNum >= 0 && cardNum <= 51)
@@ -130,10 +133,7 @@ namespace Ch13CardLib
             else
             {
                 throw new CardOutOfRangeException(Cards.Clone() as Cards);
-            }
-                
-            
-           
+            }      
         }
 
         /// <summary>
