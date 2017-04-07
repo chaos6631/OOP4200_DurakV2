@@ -19,12 +19,26 @@ namespace DurakGameLib
         #endregion
 
         #region CONSTRUCTORS
+        /// <summary>
+        /// Default
+        /// </summary>
         public Game()
         {
             //this.players = new Dictionary<string, Player>();
 
         }
-
+        /// <summary>
+        /// Paramaterized
+        /// </summary>
+        /// <param name="humanName"></param>
+        /// <param name="opponentName"></param>
+        public Game(string humanName, string computerName)
+        {
+            this.humanPlayer = new Player(humanName);
+            //this.HumanPlayer.PlayerName = humanName;
+            this.computerPlayer = new Player(computerName); // NEEDS TO BE CHNAGED TO AIPLAYER WHEN CONSTRUCTOR IS CREATED
+            //this.ComputerPlayer.PlayerName = computerName;
+        }
         #endregion
 
         #region INSTANCE MEMBERS
@@ -163,7 +177,6 @@ namespace DurakGameLib
         ///
         /// </summary>
         /// <param name="attacker">The player who is an attacker</param>
-        
         public bool PlayerTurn(Player attacker)
         {
             bool played = false;
@@ -228,13 +241,13 @@ namespace DurakGameLib
         /// <summary>
         /// Start the current game, string should be validated in the GUI
         /// </summary>
-        public void StartGame(string playerName)
+        public void StartGame(int deckSize)
         {
-            //// Initialize Players
+            //// Initialize Players in constructor
             try
             {            
                 //// Get choice of deck size from user
-                int deckSize = 36;              // should come from event
+                //int deckSize = 36;              // should come from event
 
                 //// Initialize Deck and Deal cards
                 this.GameDeck = new Talon();

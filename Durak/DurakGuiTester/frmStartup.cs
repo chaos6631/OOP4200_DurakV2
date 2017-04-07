@@ -12,6 +12,18 @@ namespace DurakGuiTester
 {
     public partial class frmStartup : Form
     {
+
+        public static int talonSize
+        {
+            get; set;
+        }
+
+
+        public static string playerName
+        {
+            get; set;
+        }
+
         public frmStartup()
         {
             InitializeComponent();
@@ -22,17 +34,22 @@ namespace DurakGuiTester
             //Player
             try
             {
-                //string name = txtPlayerName.Text;
-                //DurakGameLib.Player playerOne = new DurakGameLib.Player(name);
+                playerName = txtPlayerName.Text;
+                if (playerName == "")
+                {
+                    playerName = "Player";
+                }
+                DurakGameLib.Player player1 = new DurakGameLib.Player(playerName);
                 //Deck
-                //int decksize = (int)lbxDeckSize.SelectedValue;
-                //DurakGameLib.Talon gameTalon = new DurakGameLib.Talon();
+                talonSize = Convert.ToInt32(lbxDeckSize.SelectedItem);
+
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message);
             }
-           
+            Close();
+
         }
     }
 }

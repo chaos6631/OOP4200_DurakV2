@@ -84,6 +84,7 @@
             this.txtPlayerName.Name = "txtPlayerName";
             this.txtPlayerName.Size = new System.Drawing.Size(100, 20);
             this.txtPlayerName.TabIndex = 5;
+            this.txtPlayerName.Text = "Player";
             // 
             // lbxDeckSize
             // 
@@ -94,7 +95,8 @@
             "52"});
             this.lbxDeckSize.Location = new System.Drawing.Point(140, 129);
             this.lbxDeckSize.Name = "lbxDeckSize";
-            this.lbxDeckSize.Size = new System.Drawing.Size(49, 17);
+            this.lbxDeckSize.Size = new System.Drawing.Size(49, 51);
+            this.lbxDeckSize.SelectedIndex = 0;
             this.lbxDeckSize.TabIndex = 6;
             // 
             // frmStartup

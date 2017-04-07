@@ -50,9 +50,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CardLib\Ch13CardLib.csproj">
+    <ProjectReference Include="..\CardLib\CardLib.csproj">
       <Project>{33581AFC-032D-4198-8C0E-35941B37E45E}</Project>
-      <Name>Ch13CardLib</Name>
+      <Name>CardLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\DurakLib\DurakGameLib.csproj">
       <Project>{ae57a857-fa4c-4984-be55-39a66147053f}</Project>

@@ -12,7 +12,7 @@ namespace DurakGameClient
         static void Main(string[] args)
         {
             Game newGame = new Game();
-            newGame.StartGame("Chris");
+            newGame.StartGame(36);
 
             bool continuePlaying = true;
             while (continuePlaying)

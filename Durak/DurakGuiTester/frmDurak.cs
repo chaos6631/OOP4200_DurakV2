@@ -12,7 +12,10 @@ namespace DurakGuiTester
 {
     public partial class frmDurak : Form
     {
-        
+        private string playerName;   // this should be set in forms constructor, value is passed by frmStartup
+        private int deckSize;        // this should be set in forms constructor, value is passed by frmStartup
+
+
         public frmDurak()
         {
             InitializeComponent();
@@ -24,26 +27,28 @@ namespace DurakGuiTester
             //Create frmStartup to retrieve player info
             Form playerDetails = new frmStartup();
             playerDetails.ShowDialog();
+            
             #endregion
 
-            //Create Deck   
 
+            string name = frmStartup.playerName; // should come from constructor
+            int talonSize = frmStartup.talonSize;
+            //THESE SHOULD BE HANDLED IN GAME 
             //Create Player
-            DurakGameLib.Player playerOne = new DurakGameLib.Player();
+            //DurakGameLib.Player playerOne = new DurakGameLib.Player(name);
             //Create Opponent
-            
-            //Distribute starting hand
+            //DurakGameLib.Player opponent = new DurakGameLib.Player("cpu");
 
-            //Assign trump
-
-            //Determine player order
+            //Create/Start Game
+            DurakGameLib.Game myGame = new DurakGameLib.Game(playerName, "cpu");
+            myGame.StartGame(talonSize);
 
             #region Populate Starting Display Controls
             //Names
-            lblPlayerName.Text = "";
+            lblPlayerName.Text = name;
             lblOpponentName.Text = "CPU";
             //Roles
-            if (playerOne.IsAttacker)
+            if (myGame.HumanPlayer.IsAttacker)
             {
                 lblPlayerRole.Text = "Attacker";
                 lblOpponentRole.Text = "Defender";
@@ -53,14 +58,21 @@ namespace DurakGuiTester
                 lblPlayerRole.Text = "Defender";
                 lblOpponentRole.Text = "Attacker";
             }
+            //Display hand
+
             //Talon
             cardTopDeck.Visible = true;
-            //Trump Card
-                        
-            
+            //lblCardsRemainingDisplay.Text = myGame.gameDeck;
+            //Trump
+            CardUserControl.CardUserControl trumpCardDisplay = new CardUserControl.CardUserControl();
+            pnlDeckArea.Controls.Add(trumpCardDisplay);
+            trumpCardDisplay.Card = myGame.GameTrumpCard;
+            trumpCardDisplay.FaceUp = true;
+            trumpCardDisplay.Show();
+
             #endregion
         }
-               
+
         /// <summary>
         /// When the number of cards in the deck reaches 0, hide the talon
         /// </summary>

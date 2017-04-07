@@ -58,9 +58,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CardLib\Ch13CardLib.csproj">
+    <ProjectReference Include="..\CardLib\CardLib.csproj">
       <Project>{33581afc-032d-4198-8c0e-35941b37e45e}</Project>
-      <Name>Ch13CardLib</Name>
+      <Name>CardLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
