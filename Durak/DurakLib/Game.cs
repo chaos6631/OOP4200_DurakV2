@@ -122,8 +122,7 @@ namespace DurakGameLib
 
 
         #endregion
-
-
+        
         #region METHODS
         /// <summary>
         /// Commence the next round of the current game
@@ -258,7 +257,8 @@ namespace DurakGameLib
                 //// Deal cards to players
                 DealCards();
                 //// Set trump card
-                gameTrumpCard = GameDeck.GetCard();
+                GameTrumpCard = GameDeck.GetCard();
+                GameTrumpCard.FaceUp = true;
             }
             catch (Exception)
             {
@@ -339,6 +339,7 @@ namespace DurakGameLib
                 for (int i = 1; i <= INITIAL_PLAYER_CARD_COUNT; i++)
                 {
                     humanPlayer.TakeFromDeck(GameDeck.GetCard());
+
                     computerPlayer.TakeFromDeck(GameDeck.GetCard());
                 }
             }

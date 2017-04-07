@@ -52,7 +52,7 @@ namespace DurakGuiTester
             {
                 MessageBox.Show(ex.Message);
             }
-            Close();
+            //Close();
 
         }
     }

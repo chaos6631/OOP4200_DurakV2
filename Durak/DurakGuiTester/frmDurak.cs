@@ -87,8 +87,8 @@ namespace DurakGuiTester
         {
             #region Get Player Name/Deck Size
             //Create frmStartup to retrieve player info
-            Form playerDetails = new frmStartup();
-            playerDetails.ShowDialog();
+            //Form playerDetails = new frmStartup();
+            //playerDetails.ShowDialog();
             
             #endregion
 
@@ -127,7 +127,7 @@ namespace DurakGuiTester
             CardUserControl.CardUserControl trumpCardDisplay = new CardUserControl.CardUserControl();
             pnlDeckArea.Controls.Add(trumpCardDisplay);
             trumpCardDisplay.Card = myGame.GameTrumpCard;
-            trumpCardDisplay.FaceUp = true;
+            //trumpCardDisplay.FaceUp = true;
             trumpCardDisplay.Show();
 
             #endregion

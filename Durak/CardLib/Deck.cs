@@ -114,7 +114,9 @@ namespace CardLib
         public Card GetCard()
         {
             int cardCount = Cards.Count;
-            return this.GetCard(cardCount - 1);
+            Card returnCard = this.GetCard(cardCount - 1);            
+            this.Cards.RemoveAt(cardCount - 1);
+            return returnCard;
         }
 
         /// <summary>
