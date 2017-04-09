@@ -73,6 +73,30 @@ namespace DurakGameLib
         }
 
         /// <summary>
+        /// find eatncard for ai from human last card
+        /// </summary>
+        /// <param name="card"></param>
+        /// <param name="eatnCard"></param>
+        /// <returns></returns>
+        public Card FindeatnCard(Card card, Card eatnCard)
+        {
+            if (card.Rank == Rank.Ace)
+            {
+                eatnCard = card;
+            }
+            else if (card.Rank == Rank.King)
+            {
+                eatnCard = card;
+            }
+            else if (card.Rank == Rank.Queen)
+            {
+                eatnCard = card;
+            }
+
+            return eatnCard;
+
+        }
+        /// <summary>
         /// basic logic of ai player
         /// </summary>
         public void BasicAILogic()
@@ -157,6 +181,10 @@ namespace DurakGameLib
             {
                 Boolean aiLoses = true;
                 Card cardToPlay = new Card();
+
+                Card cardEatn = new Card();
+                cardEatn = FindeatnCard(humanLastCard, cardEatn);//find eatn card from human last card.
+
                 foreach (Card aicard in PlayerHand)
                 {
                     cardToPlay = aicard;
@@ -186,8 +214,14 @@ namespace DurakGameLib
                     TakeFromDeck(humanLastCard);
                 }
                 else
-                {
+                {   
+                    if(cardEatn != null)
+                    {
+                        TakeFromDeck(humanLastCard);
+                    }
+                    else { 
                     PlayCard(cardToPlay);
+                    }
                 }
 
             }
