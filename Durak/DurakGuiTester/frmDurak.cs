@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DurakGameLib;
 
 namespace DurakGuiTester
 {
@@ -16,6 +17,7 @@ namespace DurakGuiTester
         private string playerName;   // this should be set in forms constructor, value is passed by frmStartup
         private string opponentName = "CPU";
         private int talonSize;        // this should be set in forms constructor, value is passed by frmStartup
+        private DurakGameLib.Game myGame;
         #endregion
 
         #region ACCESSORS & MUTATORS
@@ -55,6 +57,19 @@ namespace DurakGuiTester
             set
             {
                 talonSize = value;
+            }
+        }
+
+        public Game MyGame
+        {
+            get
+            {
+                return myGame;
+            }
+
+            set
+            {
+                myGame = value;
             }
         }
 
@@ -101,17 +116,18 @@ namespace DurakGuiTester
             //DurakGameLib.Player opponent = new DurakGameLib.Player("cpu");
 
             // CREATE/START GAME
-            DurakGameLib.Game myGame = new DurakGameLib.Game(PlayerName, OpponentName);
-            myGame.StartGame(TalonSize); // CARDS ARE DEALT AND TRUMPCARD IS DECIDED
+            MyGame = new DurakGameLib.Game(PlayerName, OpponentName);
+            CardsPlayed playedCards = new CardsPlayed();
+            MyGame.StartGame(TalonSize); // CARDS ARE DEALT AND TRUMPCARD IS DECIDED
             //Determine attacker/defender
-            myGame.IsHumanAttacker();
+            MyGame.IsHumanAttacker();
 
             #region Populate Starting Display Controls
             // SET NAMES
             lblPlayerName.Text = PlayerName;
             lblOpponentName.Text = OpponentName;
             // UPDATE PLAYER LABELS IN FORM
-            if (myGame.HumanPlayer.IsAttacker)
+            if (MyGame.HumanPlayer.IsAttacker)
             {
                 lblPlayerRole.Text = "Attacker";
                 lblOpponentRole.Text = "Defender";
@@ -124,50 +140,51 @@ namespace DurakGuiTester
 
             //Talon
             cardTopDeck.Visible = true;
-            lblCardsRemainingDisplay.Text = myGame.GameDeck.RemainingCardCount().ToString();
+            lblCardsRemainingDisplay.Text = MyGame.GameDeck.RemainingCardCount().ToString();
             //Trump
             CardUserControl.CardUserControl trumpCardDisplay = new CardUserControl.CardUserControl();
             pnlDeckArea.Controls.Add(trumpCardDisplay);
             trumpCardDisplay.Location = new Point(10,12);
-            trumpCardDisplay.Card = myGame.GameTrumpCard;
+            trumpCardDisplay.Card = MyGame.GameTrumpCard;
             trumpCardDisplay.Show();
 
             // NEED TO POPULATE PLAYERS CARDS IN THE FORM HERE
             //Display hands
             //Player
-            for (int index = 0; index < myGame.HumanPlayer.PlayerHand.Count(); index++)
+            for (int index = 0; index < MyGame.HumanPlayer.PlayerHand.Count(); index++)
             {
                 CardUserControl.CardUserControl handCard = new CardUserControl.CardUserControl();
-                handCard.Card = myGame.HumanPlayer.PlayerHand.ElementAt(index);
+                handCard.Card = MyGame.HumanPlayer.PlayerHand.ElementAt(index);
                 handCard.FaceUp = true;
-                handCard.Click += new EventHandler(card_Click);
+                handCard.Click += new EventHandler(handCard_Click);
                 pnlPlayer.Controls.Add(handCard);
                 handCard.BringToFront();
-                handCard.Location = new Point((580 / myGame.HumanPlayer.PlayerHand.Count()) + (1160 / myGame.HumanPlayer.PlayerHand.Count() * index), 12);
+                handCard.Location = new Point((580 / MyGame.HumanPlayer.PlayerHand.Count()) + (1160 / MyGame.HumanPlayer.PlayerHand.Count() * index), 12);                
             }
             //CPU
-            for (int index = 0; index < myGame.ComputerPlayer.PlayerHand.Count(); index++)
+            for (int index = 0; index < MyGame.ComputerPlayer.PlayerHand.Count(); index++)
             {
                 CardUserControl.CardUserControl handCard = new CardUserControl.CardUserControl();
-                handCard.Card = myGame.ComputerPlayer.PlayerHand.ElementAt(index);
+                handCard.Card = MyGame.ComputerPlayer.PlayerHand.ElementAt(index);
                 handCard.FaceUp = true; //Remove after debugging
+                handCard.Enabled = false;
                 pnlOpponent.Controls.Add(handCard);
                 handCard.BringToFront();
-                handCard.Location = new Point((580 / myGame.ComputerPlayer.PlayerHand.Count()) + (1160 / myGame.HumanPlayer.PlayerHand.Count() * index), 12);
+                handCard.Location = new Point((580 / MyGame.ComputerPlayer.PlayerHand.Count()) + (1160 / MyGame.HumanPlayer.PlayerHand.Count() * index), 12);
             }
             // TRIGGER ATTACKERS CARD SELECTION METHOD
-            //Human player set to attacker for debugging purposes
-            myGame.HumanPlayer.IsAttacker = true;
-            myGame.ComputerPlayer.IsAttacker = false;
+            //while (MyGame.ContinueGame)
+            //{
+                //Human player set to attacker for debugging purposes
+                MyGame.HumanPlayer.IsAttacker = true;
+                MyGame.ComputerPlayer.IsAttacker = false;
 
-            if (myGame.HumanPlayer.IsAttacker)
-            {
-                //myGame.PlayerTurn(myGame.HumanPlayer);
-            }
-            else
-            {
-                
-            }
+                if (MyGame.ComputerPlayer.IsAttacker)
+                {
+                    MyGame.PlayerTurn(MyGame.ComputerPlayer);
+                }
+           // }
+            
             #endregion
         }
 
@@ -198,11 +215,21 @@ namespace DurakGuiTester
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void card_Click(object sender, EventArgs e)
+        protected void handCard_Click(object sender, EventArgs e)
         {
-            //CURRENTLY EVENT IS NOT TRIGGERING AT ALL
-            CardUserControl.CardUserControl card = sender as CardUserControl.CardUserControl;
-            card.FaceUp = false;
+            CardUserControl.CardUserControl handCard = sender as CardUserControl.CardUserControl;
+            if(myGame.IsCardPlayable(handCard.Card))
+            {
+                //Add to play area and remove from hand
+                pnlPlayArea.Controls.Add(handCard);                
+                MyGame.PlayedCards.Push(handCard.Card);
+                handCard.Location = new Point(90 * (MyGame.PlayedCards.Count-1)+10, 12);
+
+                pnlPlayer.Controls.Remove(handCard);
+                MyGame.HumanPlayer.PlayerHand.Remove(handCard.Card);
+                
+            }
+            
         }
 
         #endregion

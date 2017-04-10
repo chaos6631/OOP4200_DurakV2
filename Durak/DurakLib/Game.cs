@@ -38,6 +38,7 @@ namespace DurakGameLib
             //this.HumanPlayer.PlayerName = humanName;
             this.computerPlayer = new Player(computerName); // NEEDS TO BE CHNAGED TO AIPLAYER WHEN CONSTRUCTOR IS CREATED
             //this.ComputerPlayer.PlayerName = computerName;
+            this.playedCards = new CardsPlayed();
         }
         #endregion
 
@@ -48,7 +49,7 @@ namespace DurakGameLib
         private Talon gameDeck;
         private Card gameTrumpCard;
         private CardsPlayed playedCards;
-
+        private bool continueGame;
         #endregion
 
         #region ACCESSORS & MUTATORS
@@ -109,6 +110,32 @@ namespace DurakGameLib
             set
             {
                 gameDeck = value;
+            }
+        }
+
+        public bool ContinueGame
+        {
+            get
+            {
+                return continueGame;
+            }
+
+            set
+            {
+                continueGame = value;
+            }
+        }
+
+        public CardsPlayed PlayedCards
+        {
+            get
+            {
+                return playedCards;
+            }
+
+            set
+            {
+                playedCards = value;
             }
         }
 
@@ -181,20 +208,26 @@ namespace DurakGameLib
             bool played = false;
             int cardIndex = 0;      // equals selected card
                                     //// trigger human players select card event function
-            Console.WriteLine("Do you wish to pass?");
-            string answer = Console.ReadLine();
-            answer = answer.ToLower();
-            if (answer == "n")
+            if (attacker.Equals(ComputerPlayer))
             {
-                Console.WriteLine("Which card do you wish to play?");
-                cardIndex = Console.Read();
-                // selected card to play is set to card index
-                if (IsCardPlayable(attacker.PlayerHand.ElementAt(cardIndex)))
-                {
-                    attacker.PlayCard(attacker.PlayerHand.ElementAt(cardIndex));
-                    played = true;
-                }
+                //Do AI TURN PROCESSES
+                played = true;
             }
+            else
+            {
+
+            }
+            //if (answer == "n")
+            //{
+            //    Console.WriteLine("Which card do you wish to play?");
+            //    cardIndex = Console.Read();
+            //    // selected card to play is set to card index
+            //    if (IsCardPlayable(attacker.PlayerHand.ElementAt(cardIndex)))
+            //    {
+            //        attacker.PlayCard(attacker.PlayerHand.ElementAt(cardIndex));
+            //        played = true;
+            //    }
+            //}
             
             
             
@@ -217,9 +250,9 @@ namespace DurakGameLib
             if (playerCard.Suit == GameTrumpCard.Suit)
             {
                 if((playerCard.Suit == GameTrumpCard.Suit &&
-                playedCards.Last().Suit == GameTrumpCard.Suit))
+                PlayedCards.Last().Suit == GameTrumpCard.Suit))
                 {
-                    if (playerCard.Rank > playedCards.Last().Rank)
+                    if (playerCard.Rank > PlayedCards.Last().Rank)
                     {
                         isPlayable = true;
                     }
@@ -229,11 +262,16 @@ namespace DurakGameLib
                     isPlayable = true;
                 }
             }
-            //// Is card of higher value than other players card
-            else if (playerCard.Rank > playedCards.Last().Rank)
+            else if (playedCards.Count == 0)
             {
                 isPlayable = true;
             }
+            //// Is card of higher value than other players card
+            else if (playerCard.Rank > PlayedCards.Last().Rank)
+            {
+                isPlayable = true;
+            }
+            
             return isPlayable;
         }
 
@@ -244,10 +282,10 @@ namespace DurakGameLib
         {
             //// Initialize Players in constructor
             try
-            {            
+            {
                 //// Get choice of deck size from user
                 //int deckSize = 36;              // should come from event
-
+                continueGame = true;
                 //// Initialize Deck and Deal cards
                 this.GameDeck = new Talon();
 

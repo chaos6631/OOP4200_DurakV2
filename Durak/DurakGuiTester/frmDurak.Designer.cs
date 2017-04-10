@@ -138,7 +138,6 @@
             card1.Suit = CardLib.Suit.Clubs;
             this.cardTopDeck.Card = card1;
             this.cardTopDeck.CardOrientation = System.Windows.Forms.Orientation.Vertical;
-            this.cardTopDeck.Enabled = false;
             this.cardTopDeck.FaceUp = false;
             this.cardTopDeck.Location = new System.Drawing.Point(132, 12);
             this.cardTopDeck.Name = "cardTopDeck";
@@ -146,6 +145,7 @@
             this.cardTopDeck.Size = new System.Drawing.Size(80, 100);
             this.cardTopDeck.Suit = CardLib.Suit.Clubs;
             this.cardTopDeck.TabIndex = 3;
+            this.cardTopDeck.Click += new System.EventHandler(this.handCard_Click);
             // 
             // lblOpponentName
             // 

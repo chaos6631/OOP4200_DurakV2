@@ -7,7 +7,7 @@ using CardLib;
 
 namespace DurakGameLib
 {
-    class CardsPlayed : Stack<Card>
+    public class CardsPlayed : Stack<Card>
     {
         /// <summary>
         /// to be used by aiplayer to make decisions.
