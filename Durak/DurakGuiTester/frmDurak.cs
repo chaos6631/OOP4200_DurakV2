@@ -220,11 +220,14 @@ namespace DurakGuiTester
             CardUserControl.CardUserControl handCard = sender as CardUserControl.CardUserControl;
             if(myGame.IsCardPlayable(handCard.Card))
             {
-                //Add to play area and remove from hand
+                //Add to play area
                 pnlPlayArea.Controls.Add(handCard);                
                 MyGame.PlayedCards.Push(handCard.Card);
+                MyGame.PlayedCards.HumanLastCardPlayed = handCard.Card;
                 handCard.Location = new Point(90 * (MyGame.PlayedCards.Count-1)+10, 12);
+                handCard.Enabled = false;
 
+                //Remove from hand
                 pnlPlayer.Controls.Remove(handCard);
                 MyGame.HumanPlayer.PlayerHand.Remove(handCard.Card);
                 
@@ -233,5 +236,29 @@ namespace DurakGuiTester
         }
 
         #endregion
+
+        private void btnEndTurn_Click(object sender, EventArgs e)
+        {
+            //Human fails to defend
+            if (MyGame.PlayedCards.Count == 0)
+            {
+                //A card must be played
+            }
+            else if (MyGame.PlayedCards.Last() == MyGame.PlayedCards.ComputerLastCardPlayed && MyGame.HumanPlayer.IsAttacker == false)
+            {
+                //Add played cards to hand
+            }
+            //CPU fails to defend
+            else if (MyGame.PlayedCards.Last() == MyGame.PlayedCards.HumanLastCardPlayed && MyGame.HumanPlayer.IsAttacker == true)
+            {
+                //Add played cards to hand
+            }
+            //Deal cards to fill remaining spots
+            MyGame.DealCards();
+            //Clear played cards
+            MyGame.PlayedCards.Clear();
+            MyGame.PlayedCards.HumanLastCardPlayed = null;
+            MyGame.PlayedCards.ComputerLastCardPlayed = null;
+        }
     }
 }

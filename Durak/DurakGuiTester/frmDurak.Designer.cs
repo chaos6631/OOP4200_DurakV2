@@ -138,6 +138,7 @@
             card1.Suit = CardLib.Suit.Clubs;
             this.cardTopDeck.Card = card1;
             this.cardTopDeck.CardOrientation = System.Windows.Forms.Orientation.Vertical;
+            this.cardTopDeck.Enabled = false;
             this.cardTopDeck.FaceUp = false;
             this.cardTopDeck.Location = new System.Drawing.Point(132, 12);
             this.cardTopDeck.Name = "cardTopDeck";
@@ -178,6 +179,7 @@
             this.btnEndTurn.TabIndex = 6;
             this.btnEndTurn.Text = "&End Turn";
             this.btnEndTurn.UseVisualStyleBackColor = true;
+            this.btnEndTurn.Click += new System.EventHandler(this.btnEndTurn_Click);
             // 
             // frmDurak
             // 
