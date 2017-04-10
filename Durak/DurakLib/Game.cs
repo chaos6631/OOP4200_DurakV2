@@ -141,9 +141,9 @@ namespace DurakGameLib
                     if (HumanPlayer.IsPlayable)
                     {
                         if (!PlayerTurn(HumanPlayer))
-                    {
-                        roundContinue = false;
-                    }
+                        {
+                            roundContinue = false;
+                        }
                     }
 
                 }
@@ -153,9 +153,9 @@ namespace DurakGameLib
                     if (ComputerPlayer.IsPlayable)
                     {
                         if (!PlayerTurn(ComputerPlayer))
-                    {
-                        roundContinue = false;
-                    }
+                        {
+                            roundContinue = false;
+                        }
                     }
 
                 }

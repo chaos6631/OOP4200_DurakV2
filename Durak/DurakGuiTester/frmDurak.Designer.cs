@@ -66,6 +66,7 @@
             this.lblOpponentRole.Size = new System.Drawing.Size(98, 15);
             this.lblOpponentRole.TabIndex = 3;
             this.lblOpponentRole.Text = "Defender/Attacker";
+            this.lblOpponentRole.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pnlPlayer
             // 
@@ -86,6 +87,7 @@
             this.lblPlayerRole.Size = new System.Drawing.Size(98, 15);
             this.lblPlayerRole.TabIndex = 4;
             this.lblPlayerRole.Text = "Defender/Attacker";
+            this.lblPlayerRole.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pnlPlayArea
             // 
@@ -149,7 +151,7 @@
             // 
             this.lblOpponentName.AutoSize = true;
             this.lblOpponentName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblOpponentName.Location = new System.Drawing.Point(543, 144);
+            this.lblOpponentName.Location = new System.Drawing.Point(554, 141);
             this.lblOpponentName.Name = "lblOpponentName";
             this.lblOpponentName.Size = new System.Drawing.Size(87, 15);
             this.lblOpponentName.TabIndex = 4;
@@ -160,7 +162,7 @@
             // 
             this.lblPlayerName.AutoSize = true;
             this.lblPlayerName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblPlayerName.Location = new System.Drawing.Point(543, 533);
+            this.lblPlayerName.Location = new System.Drawing.Point(561, 535);
             this.lblPlayerName.Name = "lblPlayerName";
             this.lblPlayerName.Size = new System.Drawing.Size(69, 15);
             this.lblPlayerName.TabIndex = 5;

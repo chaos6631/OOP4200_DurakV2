@@ -103,6 +103,8 @@ namespace DurakGuiTester
             // CREATE/START GAME
             DurakGameLib.Game myGame = new DurakGameLib.Game(PlayerName, OpponentName);
             myGame.StartGame(TalonSize); // CARDS ARE DEALT AND TRUMPCARD IS DECIDED
+            //Determine attacker/defender
+            myGame.IsHumanAttacker();
 
             #region Populate Starting Display Controls
             // SET NAMES
@@ -119,22 +121,53 @@ namespace DurakGuiTester
                 lblPlayerRole.Text = "Defender";
                 lblOpponentRole.Text = "Attacker";
             }
-            //Display hand
 
             //Talon
             cardTopDeck.Visible = true;
-            //lblCardsRemainingDisplay.Text = myGame.gameDeck;
+            lblCardsRemainingDisplay.Text = myGame.GameDeck.RemainingCardCount().ToString();
             //Trump
             CardUserControl.CardUserControl trumpCardDisplay = new CardUserControl.CardUserControl();
             pnlDeckArea.Controls.Add(trumpCardDisplay);
+            trumpCardDisplay.Location = new Point(10,12);
             trumpCardDisplay.Card = myGame.GameTrumpCard;
-            //trumpCardDisplay.FaceUp = true;
             trumpCardDisplay.Show();
 
             // NEED TO POPULATE PLAYERS CARDS IN THE FORM HERE
-
+            //Display hands
+            //Player
+            for (int index = 0; index < myGame.HumanPlayer.PlayerHand.Count(); index++)
+            {
+                CardUserControl.CardUserControl handCard = new CardUserControl.CardUserControl();
+                handCard.Card = myGame.HumanPlayer.PlayerHand.ElementAt(index);
+                handCard.FaceUp = true;
+                handCard.Click += new EventHandler(card_Click);
+                pnlPlayer.Controls.Add(handCard);
+                handCard.BringToFront();
+                handCard.Location = new Point((580 / myGame.HumanPlayer.PlayerHand.Count()) + (1160 / myGame.HumanPlayer.PlayerHand.Count() * index), 12);
+            }
+            //CPU
+            for (int index = 0; index < myGame.ComputerPlayer.PlayerHand.Count(); index++)
+            {
+                CardUserControl.CardUserControl handCard = new CardUserControl.CardUserControl();
+                handCard.Card = myGame.ComputerPlayer.PlayerHand.ElementAt(index);
+                handCard.FaceUp = true; //Remove after debugging
+                pnlOpponent.Controls.Add(handCard);
+                handCard.BringToFront();
+                handCard.Location = new Point((580 / myGame.ComputerPlayer.PlayerHand.Count()) + (1160 / myGame.HumanPlayer.PlayerHand.Count() * index), 12);
+            }
             // TRIGGER ATTACKERS CARD SELECTION METHOD
+            //Human player set to attacker for debugging purposes
+            myGame.HumanPlayer.IsAttacker = true;
+            myGame.ComputerPlayer.IsAttacker = false;
 
+            if (myGame.HumanPlayer.IsAttacker)
+            {
+                //myGame.PlayerTurn(myGame.HumanPlayer);
+            }
+            else
+            {
+                
+            }
             #endregion
         }
 
@@ -159,6 +192,17 @@ namespace DurakGuiTester
             {
                 cardTopDeck.Visible = false;
             }
+        }
+        /// <summary>
+        ///  Attempt to play a card when clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void card_Click(object sender, EventArgs e)
+        {
+            //CURRENTLY EVENT IS NOT TRIGGERING AT ALL
+            CardUserControl.CardUserControl card = sender as CardUserControl.CardUserControl;
+            card.FaceUp = false;
         }
 
         #endregion
