@@ -9,8 +9,7 @@ namespace CardLib
     public class Deck : ICloneable
     {
         #region MEMBERS AND PROPERTIES
-        protected Cards cards = new Cards();
-
+        protected Cards cards = new Cards();      
         public Cards Cards
         {
             get
@@ -141,18 +140,18 @@ namespace CardLib
         /// <summary>
         /// Shuffles the card objects in the deck
         /// </summary>
-        public void Shuffle()
+        public void Shuffle(int deckSize)
         {
             Cards newDeck = new Cards();
-            bool[] assigned = new bool[52];
+            bool[] assigned = new bool[deckSize];
             Random sourceGen = new Random();
-            for (int i = 0; i < 52; i++)
+            for (int i = 0; i < deckSize; i++)
             {
                 int sourceCard = 0;
                 bool foundCard = false;
                 while (foundCard == false)
                 {
-                    sourceCard = sourceGen.Next(52);
+                    sourceCard = sourceGen.Next(deckSize);
                     if (assigned[sourceCard] == false)
                         foundCard = true;
                 }

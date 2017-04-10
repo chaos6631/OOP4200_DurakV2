@@ -36,7 +36,7 @@ namespace DurakGameLib
         {
             this.humanPlayer = new Player(humanName);
             //this.HumanPlayer.PlayerName = humanName;
-            this.computerPlayer = new Player(computerName); // NEEDS TO BE CHNAGED TO AIPLAYER WHEN CONSTRUCTOR IS CREATED
+            this.computerPlayer = new Player(); // NEEDS TO BE CHNAGED TO AIPLAYER WHEN CONSTRUCTOR IS CREATED
             //this.ComputerPlayer.PlayerName = computerName;
             this.playedCards = new CardsPlayed();
         }
@@ -244,33 +244,44 @@ namespace DurakGameLib
         /// <returns>True if card can be played, false if not</returns>
         public bool IsCardPlayable(Card playerCard)
         {
-            bool isPlayable = false;
+            bool isPlayable = false;            
+            Card lastCard;            
             
-            //// Is card Trump, if so are both cards trump cards
-            if (playerCard.Suit == GameTrumpCard.Suit)
+            //// First card played
+            if (playedCards.Count == 0)
             {
-                if((playerCard.Suit == GameTrumpCard.Suit &&
-                PlayedCards.Last().Suit == GameTrumpCard.Suit))
+                isPlayable = true;
+            }
+            else
+            {
+                lastCard = PlayedCards.First();
+                //// Is card Trump, if so are both cards trump cards
+                if (playerCard.Suit == GameTrumpCard.Suit)
                 {
-                    if (playerCard.Rank > PlayedCards.Last().Rank)
+                    
+                    if (playerCard.Suit == GameTrumpCard.Suit &&
+                    lastCard.Suit == GameTrumpCard.Suit)
+                    {
+                        if (playerCard.Rank > lastCard.Rank)
+                        {
+                            isPlayable = true;
+                        }
+                        else
+                        {
+                            isPlayable = false;
+                        }
+                    }
+                    else
                     {
                         isPlayable = true;
                     }
                 }
-                else
+                //// Is card of higher value than other players card, not trump
+                else if (playerCard.Rank > lastCard.Rank && lastCard.Suit != GameTrumpCard.Suit)
                 {
                     isPlayable = true;
                 }
-            }
-            else if (playedCards.Count == 0)
-            {
-                isPlayable = true;
-            }
-            //// Is card of higher value than other players card
-            else if (playerCard.Rank > PlayedCards.Last().Rank)
-            {
-                isPlayable = true;
-            }
+            }            
             
             return isPlayable;
         }
@@ -291,6 +302,9 @@ namespace DurakGameLib
 
                 //// Set deck to required size                
                 this.GameDeck.SetDeckSize(deckSize);
+
+                //// Shuffle the deck
+                this.GameDeck.Shuffle(this.GameDeck.Cards.Count);
 
                 //// Deal cards to players
                 DealCards();

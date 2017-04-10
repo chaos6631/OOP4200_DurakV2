@@ -7,11 +7,11 @@ using CardLib;
 
 namespace DurakGameLib
 {
-    class AIPlayer : Player
+    public class AIPlayer : Player
     {
         #region CLASS MEMBERS
 
-        string AI_PLAYER_NAME = "AI Player";
+        static string AI_PLAYER_NAME = "AI Player";
 
         #endregion
 
@@ -20,9 +20,9 @@ namespace DurakGameLib
         /// <summary>
         /// Constructor for the AIPlayer object
         /// </summary>
-        public AIPlayer()
+        public AIPlayer() : base(AI_PLAYER_NAME)
         {
-            new Player(AI_PLAYER_NAME);
+            //new Player(AI_PLAYER_NAME);   // not correct way to call base constructor
         }
         #endregion
 
@@ -101,10 +101,13 @@ namespace DurakGameLib
         /// </summary>
         public void BasicAILogic()
         {
+            
+            Card minimumCard = new Card();
+            Card cardToPlay = new Card();
             if (IsAttacker == true) // If the AI player is attacking
-            {
-                Card minimumCard = new Card();
+            {                
                 bool isFirstLoop = true;
+                
                 foreach (Card aicard in PlayerHand) // Loop through the AI Player's Hand
                 {
                     if (isFirstLoop)
@@ -117,11 +120,11 @@ namespace DurakGameLib
                 }
 
                 PlayCard(minimumCard); // Play the minimum card
+                cardToPlay = minimumCard;
             }
             else
             {
                 Boolean aiLoses = true;
-                Card cardToPlay = new Card(); 
                 foreach (Card aicard in PlayerHand)
                 {
                     cardToPlay = aicard;

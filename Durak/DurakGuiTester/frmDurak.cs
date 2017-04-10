@@ -18,6 +18,7 @@ namespace DurakGuiTester
         private string opponentName = "CPU";
         private int talonSize;        // this should be set in forms constructor, value is passed by frmStartup
         private DurakGameLib.Game myGame;
+        private Player currentPlayer;
         #endregion
 
         #region ACCESSORS & MUTATORS
@@ -73,6 +74,19 @@ namespace DurakGuiTester
             }
         }
 
+        public Player CurrentPlayer
+        {
+            get
+            {
+                return currentPlayer;
+            }
+
+            set
+            {
+                currentPlayer = value;
+            }
+        }
+
         #endregion
 
         #region CONSTRUCTORS
@@ -121,6 +135,18 @@ namespace DurakGuiTester
             MyGame.StartGame(TalonSize); // CARDS ARE DEALT AND TRUMPCARD IS DECIDED
             //Determine attacker/defender
             MyGame.IsHumanAttacker();
+            //Human player set to attacker for debugging purposes
+            MyGame.HumanPlayer.IsAttacker = true;
+            MyGame.ComputerPlayer.IsAttacker = false;
+            // Set current player
+            if (MyGame.HumanPlayer.IsAttacker)
+            {
+                CurrentPlayer = MyGame.HumanPlayer;
+            }
+            else
+            {
+                CurrentPlayer = MyGame.ComputerPlayer;
+            }
 
             #region Populate Starting Display Controls
             // SET NAMES
@@ -147,6 +173,7 @@ namespace DurakGuiTester
             trumpCardDisplay.Location = new Point(10,12);
             trumpCardDisplay.Card = MyGame.GameTrumpCard;
             trumpCardDisplay.Show();
+            //MyGame.ComputerPlayer.TrumpCardSuit = trumpCardDisplay.Card.Suit;   // informs computer what trump is for decision making
 
             // NEED TO POPULATE PLAYERS CARDS IN THE FORM HERE
             //Display hands
@@ -167,23 +194,22 @@ namespace DurakGuiTester
                 CardUserControl.CardUserControl handCard = new CardUserControl.CardUserControl();
                 handCard.Card = MyGame.ComputerPlayer.PlayerHand.ElementAt(index);
                 handCard.FaceUp = true; //Remove after debugging
-                handCard.Enabled = false;
+                handCard.Click += new EventHandler(handCard_Click);
+                handCard.Enabled = true;
                 pnlOpponent.Controls.Add(handCard);
                 handCard.BringToFront();
                 handCard.Location = new Point((580 / MyGame.ComputerPlayer.PlayerHand.Count()) + (1160 / MyGame.HumanPlayer.PlayerHand.Count() * index), 12);
             }
             // TRIGGER ATTACKERS CARD SELECTION METHOD
-            //while (MyGame.ContinueGame)
-            //{
-                //Human player set to attacker for debugging purposes
-                MyGame.HumanPlayer.IsAttacker = true;
-                MyGame.ComputerPlayer.IsAttacker = false;
+            // Cards should be disabled once AIPlayer working properly
 
-                if (MyGame.ComputerPlayer.IsAttacker)
-                {
-                    MyGame.PlayerTurn(MyGame.ComputerPlayer);
-                }
-           // }
+            
+
+            //if (MyGame.ComputerPlayer.IsAttacker)
+            //{
+            //    MyGame.PlayerTurn(MyGame.ComputerPlayer);
+            //}
+          
             
             #endregion
         }
@@ -210,6 +236,7 @@ namespace DurakGuiTester
                 cardTopDeck.Visible = false;
             }
         }
+        
         /// <summary>
         ///  Attempt to play a card when clicked
         /// </summary>
@@ -218,25 +245,68 @@ namespace DurakGuiTester
         protected void handCard_Click(object sender, EventArgs e)
         {
             CardUserControl.CardUserControl handCard = sender as CardUserControl.CardUserControl;
-            if(myGame.IsCardPlayable(handCard.Card))
+            // Check to see whos playing
+            if (CurrentPlayer.Equals(MyGame.HumanPlayer))
             {
-                //Add to play area
-                pnlPlayArea.Controls.Add(handCard);                
-                MyGame.PlayedCards.Push(handCard.Card);
-                MyGame.PlayedCards.HumanLastCardPlayed = handCard.Card;
-                handCard.Location = new Point(90 * (MyGame.PlayedCards.Count-1)+10, 12);
-                handCard.Enabled = false;
+                if (myGame.IsCardPlayable(handCard.Card))
+                {
+                    //Add to play area
+                    pnlPlayArea.Controls.Add(handCard);
+                    MyGame.PlayedCards.Push(handCard.Card);
+                    MyGame.PlayedCards.HumanLastCardPlayed = handCard.Card;
+                    handCard.Location = new Point(90 * (MyGame.PlayedCards.Count - 1) + 10, 12);
+                    handCard.Enabled = false;
 
-                //Remove from hand
-                pnlPlayer.Controls.Remove(handCard);
-                MyGame.HumanPlayer.PlayerHand.Remove(handCard.Card);
-                
+                    //Remove from hand
+                    pnlPlayer.Controls.Remove(handCard);
+                    MyGame.HumanPlayer.PlayCard(handCard.Card);
+
+                    // Switch players
+                    CurrentPlayer = MyGame.ComputerPlayer;
+                }
+                else // Card is NOT playable player must choose different card or pass
+                {
+                    MessageBox.Show("This card is not playable, pleas pick a card with a higher value than last card played!!");
+                }
+            }
+            else
+            {
+                if (myGame.IsCardPlayable(handCard.Card))
+                {
+                    //Add to play area
+                    pnlPlayArea.Controls.Add(handCard);
+                    MyGame.PlayedCards.Push(handCard.Card);
+                    MyGame.PlayedCards.ComputerLastCardPlayed = handCard.Card;
+                    handCard.Location = new Point(90 * (MyGame.PlayedCards.Count - 1) + 10, 12);
+                    handCard.Enabled = false;
+
+                    //Remove from hand
+                    pnlOpponent.Controls.Remove(handCard);
+                    MyGame.ComputerPlayer.PlayCard(handCard.Card);
+
+                    // Switch players
+                    CurrentPlayer = MyGame.HumanPlayer;
+                }
+                else // Card is NOT playable player must choose different card or pass
+                {
+                    MessageBox.Show("This card is not playable, pleas pick a card with a higher value than last card played!!");
+                }
             }
             
+
+            // Inform computer what the last card played was
+            //MyGame.ComputerPlayer.HumanLastCard = MyGame.PlayedCards.HumanLastCardPlayed;
+            // Launch computers turn
+            //MyGame.ComputerPlayer.BasicAILogic();
+            // At end of computers turn remove the card played by the computer from the computer hand
+            
         }
-
-        #endregion
-
+               
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnEndTurn_Click(object sender, EventArgs e)
         {
             //Human fails to defend
@@ -260,5 +330,11 @@ namespace DurakGuiTester
             MyGame.PlayedCards.HumanLastCardPlayed = null;
             MyGame.PlayedCards.ComputerLastCardPlayed = null;
         }
+
+
+
+
+
+        #endregion
     }
 }
