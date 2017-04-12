@@ -38,7 +38,7 @@ namespace DurakGameLib
         private bool isAttacker;            // Is the player the attacker 
         private int gamesWon;               // The number of games won by this player
         private int handsWon;               // The number of hands won by this player
-        private bool isPlayable;                  // true is play, pass is false
+        private bool isPassing;             // If PASSING true, if NOT false
 
         #endregion
 
@@ -80,37 +80,7 @@ namespace DurakGameLib
 
         #endregion
 
-        #region METHODS
-
-        /// <summary>
-        /// Public method which plays a card from the players hand
-        /// </summary>
-        /// <param name="card"></param>
-        public void PlayCard(Card card)
-        {
-            playerHand.Remove(card); // Removes the card played from the players hand
-        }
-
-        /// <summary>
-        /// Picks up cards and adds them to the players hand
-        /// </summary>
-        /// <param name="cards"></param>
-        public void PickUpCards(Cards cards)
-        {
-            foreach (Card card in cards) // For each card being picked up
-            {
-                playerHand.Add(card); // Add each to the players hand
-            }
-        }
-
-        /// <summary>
-        /// Takes a card from the deck as a parameter and adds it to the deck
-        /// </summary>
-        /// <param name="card"></param>
-        public void TakeFromDeck(Card card)
-        {
-            playerHand.Add(card); // Adds the card from the deck to the players hand   
-        }
+        #region ACCESSORS & MUTATORS
 
         /// <summary>
         /// Getter & Setter for the player's name
@@ -169,11 +139,47 @@ namespace DurakGameLib
         /// <summary>
         /// Getter & Setter for if the player wants to pass or play the round out
         /// </summary>
-        public bool IsPlayable
+        public bool IsPassing
         {
-            get { return isPlayable; }
-            set { isPlayable = value; }
+            get { return isPassing; }
+            set { isPassing = value; }
         }
+        #endregion
+
+        #region METHODS
+
+        /// <summary>
+        /// Public method which plays a card from the players hand
+        /// </summary>
+        /// <param name="card"></param>
+        public void PlayCard(Card card)
+        {
+            playerHand.Remove(card); // Removes the card played from the players hand
+        }
+
+        /// <summary>
+        /// Picks up cards and adds them to the players hand
+        /// </summary>
+        /// <param name="cards"></param>
+        public void PickUpCards(Cards cards)
+        {
+            foreach (Card card in cards) // For each card being picked up
+            {
+                playerHand.Add(card); // Add each to the players hand
+            }
+        }
+
+        /// <summary>
+        /// Takes a card from the deck as a parameter and adds it to the deck
+        /// </summary>
+        /// <param name="card"></param>
+        public void TakeFromDeck(Card card)
+        {
+            playerHand.Add(card); // Adds the card from the deck to the players hand   
+        }
+
+        
+
         #endregion
     }
 }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DurakGameLib;
+using CardLib;
 
 namespace DurakGuiTester
 {
@@ -201,23 +202,20 @@ namespace DurakGuiTester
                 handCard.Location = new Point((580 / MyGame.ComputerPlayer.PlayerHand.Count()) + (1160 / MyGame.HumanPlayer.PlayerHand.Count() * index), 12);
             }
             // TRIGGER ATTACKERS CARD SELECTION METHOD
-            // Cards should be disabled once AIPlayer working properly
+            // If computer is attacker, their method to play a turn should be called here 
+            // else players turn will commence
+            if(MyGame.ComputerPlayer.IsAttacker)
+            {
+                //MyGame.ComputerPlayer.BasicAILogic();
+                //// Cards should be disabled once AIPlayer working properly          
 
-            
-
-            //if (MyGame.ComputerPlayer.IsAttacker)
-            //{
-            //    MyGame.PlayerTurn(MyGame.ComputerPlayer);
-            //}
-          
+                ///// TESTING
+                MessageBox.Show("Computer is ATTACKER, they play first!!");
+            }            
             
             #endregion
         }
-
-
-        #endregion
-
-        #region METHODS
+        
         /// <summary>
         /// When the number of cards in the deck reaches 0, hide the talon
         /// </summary>
@@ -245,9 +243,10 @@ namespace DurakGuiTester
         protected void handCard_Click(object sender, EventArgs e)
         {
             CardUserControl.CardUserControl handCard = sender as CardUserControl.CardUserControl;
-            // Check to see whos playing
+            //// Check to see whos playing            
             if (CurrentPlayer.Equals(MyGame.HumanPlayer))
             {
+                //// Humans turn
                 if (myGame.IsCardPlayable(handCard.Card))
                 {
                     //Add to play area
@@ -269,6 +268,7 @@ namespace DurakGuiTester
                     MessageBox.Show("This card is not playable, pleas pick a card with a higher value than last card played!!");
                 }
             }
+            //// Computers turn
             else
             {
                 if (myGame.IsCardPlayable(handCard.Card))
@@ -292,13 +292,20 @@ namespace DurakGuiTester
                     MessageBox.Show("This card is not playable, pleas pick a card with a higher value than last card played!!");
                 }
             }
-            
+
 
             // Inform computer what the last card played was
             //MyGame.ComputerPlayer.HumanLastCard = MyGame.PlayedCards.HumanLastCardPlayed;
             // Launch computers turn
             //MyGame.ComputerPlayer.BasicAILogic();
             // At end of computers turn remove the card played by the computer from the computer hand
+            // IF computer has passed INFORM user so that can continue or end round
+            if (MyGame.ComputerPlayer.IsPassing)
+            {
+                string infoMessage = "You may continue playing cards until the ACE Trump has been played";
+                infoMessage += ",\nor you may end the round by choosing to END your turn.";
+                MessageBox.Show(infoMessage, "Your Opponent Has Chosen To PASS!");
+            }
             
         }
                
@@ -309,20 +316,38 @@ namespace DurakGuiTester
         /// <param name="e"></param>
         private void btnEndTurn_Click(object sender, EventArgs e)
         {
-            //Human fails to defend
+            //Human or computer fails to defend
             if (MyGame.PlayedCards.Count == 0)
             {
                 //A card must be played
+                MessageBox.Show("No cards have been played yet, you must play at least 1 card!");
             }
-            else if (MyGame.PlayedCards.Last() == MyGame.PlayedCards.ComputerLastCardPlayed && MyGame.HumanPlayer.IsAttacker == false)
+            // CHECK IF COMPUTER HAS PASSED WHICH MEANS PLAYER HAS WON THIS ROUND
+            else if (myGame.ComputerPlayer.IsPassing)
             {
-                //Add played cards to hand
+                // If the computer has passed that means that the computer has 
+                // lost and will be picking up cards
+
+                //Add played cards to hand, call PickUpPlayedCards()
+                MyGame.ComputerPlayer.PickUpCards(this.PickUpPlayedCards());
+                
             }
-            //CPU fails to defend
-            else if (MyGame.PlayedCards.Last() == MyGame.PlayedCards.HumanLastCardPlayed && MyGame.HumanPlayer.IsAttacker == true)
+            // CHECK IF COMPUTER HASN'T PASSED WHICH MEANS PLAYER HAS LOST THIS ROUND
+            else if (!myGame.ComputerPlayer.IsPassing)
             {
+                // COMPUTER MAY CONTINUE PLAYING
+                while(!myGame.ComputerPlayer.IsPassing)
+                {
+                    //MyGame.ComputerPlayer.??
+                }
+                
                 //Add played cards to hand
+
             }
+
+            // Remove the played cards from the GUI
+            // TODO...
+
             //Deal cards to fill remaining spots
             MyGame.DealCards();
             //Clear played cards
@@ -330,10 +355,23 @@ namespace DurakGuiTester
             MyGame.PlayedCards.HumanLastCardPlayed = null;
             MyGame.PlayedCards.ComputerLastCardPlayed = null;
         }
+        
+        #endregion
 
-
-
-
+        #region METHODS
+        /// <summary>
+        /// Passes all of the played cards to one of the players
+        /// </summary>
+        /// <returns>all of the cards played</returns>
+        public Cards PickUpPlayedCards()
+        {
+            Cards returnCards = new Cards();
+            foreach (Card card in MyGame.PlayedCards)
+            {
+                returnCards.Add(card);
+            }
+            return returnCards;
+        }
 
         #endregion
     }
