@@ -1,7 +1,7 @@
 ﻿/* Log.cs - The object for the logging of the users actions during the game.
  * 
  * Author : Cameron Fenton
- * Version : 1.1
+ * Version : 1.2
  * Since : 1.0, Apr 2017
  */
 
@@ -17,7 +17,7 @@ namespace DurakGameLib
     public class Log
     {
         #region CLASS MEMBERS
-
+        public const string DEFAULT_LOG_FILE_PATH= "C:\\Logs\\";
         #endregion
 
         #region INSTANCE MEMBERS
@@ -28,31 +28,36 @@ namespace DurakGameLib
         private FileStream fileStream = null;
         private DirectoryInfo logDirInfo = null;
         private FileInfo logFileInfo;
+        private string logFilePath;
+        private string startupPath = Directory.GetParent(@"./").FullName;
+        
         #endregion
 
         #region CONSTRUCTORS
 
         /// <summary>
-        /// Default Constructor for the Log object
+        /// Default Constructor for the Log object 
         /// </summary>
         public Log()
         {
+
+            logFilePath = DEFAULT_LOG_FILE_PATH + "Log-" + System.DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
+
+            logFileInfo = new FileInfo(logFilePath);
+
+            logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
 
         }
 
         #endregion
 
         #region METHODS
-        public void logString(string strLog)
+        /// <summary>
+        /// Appends a string to the log file
+        /// </summary>
+        /// <param name="appendToString"></param>
+        public void appendString(string strLog)
         {
-
-            string logFilePath = "C:\\Logs\\";
-
-            logFilePath = logFilePath + "Log-" + System.DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
-
-            logFileInfo = new FileInfo(logFilePath);
-
-            logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
 
             if (!logDirInfo.Exists)
             {
