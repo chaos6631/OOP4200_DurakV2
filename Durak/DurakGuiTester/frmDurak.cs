@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using DurakGameLib;
 using CardLib;
 
+
 namespace DurakGuiTester
 {
     public partial class frmDurak : Form
@@ -304,7 +305,13 @@ namespace DurakGuiTester
             {
                 string infoMessage = "You may continue playing cards until the ACE Trump has been played";
                 infoMessage += ",\nor you may end the round by choosing to END your turn.";
-                MessageBox.Show(infoMessage, "Your Opponent Has Chosen To PASS!");
+                MessageBox.Show(infoMessage, "Your Opponent(Computer) Has Chosen To PASS!");
+            }
+            else if (MyGame.HumanPlayer.IsPassing)
+            {
+                string infoMessage = "You may continue playing cards until the ACE Trump has been played";
+                infoMessage += ",\nor you may end the round by choosing to END your turn.";
+                MessageBox.Show(infoMessage, "Your Opponent(Human) Has Chosen To PASS!");
             }
             
         }
@@ -333,13 +340,34 @@ namespace DurakGuiTester
                 
             }
             // CHECK IF COMPUTER HASN'T PASSED WHICH MEANS PLAYER HAS LOST THIS ROUND
-            else if (!myGame.ComputerPlayer.IsPassing)
+            else if (!MyGame.ComputerPlayer.IsPassing)
             {
-                // COMPUTER MAY CONTINUE PLAYING
-                while(!myGame.ComputerPlayer.IsPassing)
-                {
-                    //MyGame.ComputerPlayer.??
-                }
+                // TO BE REMOVED ONCE AIPLAYER WORKING
+                MyGame.HumanPlayer.PickUpCards(this.PickUpPlayedCards());
+
+                //// COMPUTER MAY CONTINUE PLAYING
+                //while(!MyGame.ComputerPlayer.IsPassing)
+                //{
+                //    //MyGame.ComputerPlayer.??
+                //    CardUserControl.CardUserControl guiCard = new CardUserControl.CardUserControl();
+                //    Card cardToPlay = new Card();  //MyGame.ComputerPlayer.BasicLogic();
+                //    if (MyGame.IsCardPlayable(cardToPlay))
+                //    {
+                //        //// REPEATED CODE FROM CLICK COULD BE TURNED INTO A REUSABLE METHOD
+                //        //Add to play area
+                //        pnlPlayArea.Controls.Add(guiCard);
+                //        MyGame.PlayedCards.Push(cardToPlay);
+                //        MyGame.PlayedCards.ComputerLastCardPlayed = cardToPlay;
+                //        guiCard.Location = new Point(90 * (MyGame.PlayedCards.Count - 1) + 10, 12);
+                //        guiCard.Enabled = false;
+
+                //        //Remove from hand
+                //        pnlOpponent.Controls.Remove(guiCard);
+                //        MyGame.ComputerPlayer.PlayCard(cardToPlay);
+                //    }
+
+                //    // isPassing SHOULD BE SET INSIDE THE AIPLAYER TURN LOGIC
+                //}
                 
                 //Add played cards to hand
 
