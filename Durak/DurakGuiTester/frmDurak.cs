@@ -178,30 +178,8 @@ namespace DurakGuiTester
             //MyGame.ComputerPlayer.TrumpCardSuit = trumpCardDisplay.Card.Suit;   // informs computer what trump is for decision making
 
             // NEED TO POPULATE PLAYERS CARDS IN THE FORM HERE
-            //Display hands
-            //Player
-            for (int index = 0; index < MyGame.HumanPlayer.PlayerHand.Count(); index++)
-            {
-                CardUserControl.CardUserControl handCard = new CardUserControl.CardUserControl();
-                handCard.Card = MyGame.HumanPlayer.PlayerHand.ElementAt(index);
-                handCard.FaceUp = true;
-                handCard.Click += new EventHandler(handCard_Click);
-                pnlPlayer.Controls.Add(handCard);
-                handCard.BringToFront();
-                handCard.Location = new Point((580 / MyGame.HumanPlayer.PlayerHand.Count()) + (1160 / MyGame.HumanPlayer.PlayerHand.Count() * index), 12);                
-            }
-            //CPU
-            for (int index = 0; index < MyGame.ComputerPlayer.PlayerHand.Count(); index++)
-            {
-                CardUserControl.CardUserControl handCard = new CardUserControl.CardUserControl();
-                handCard.Card = MyGame.ComputerPlayer.PlayerHand.ElementAt(index);
-                handCard.FaceUp = true; //Remove after debugging
-                handCard.Click += new EventHandler(handCard_Click);
-                handCard.Enabled = true;
-                pnlOpponent.Controls.Add(handCard);
-                handCard.BringToFront();
-                handCard.Location = new Point((580 / MyGame.ComputerPlayer.PlayerHand.Count()) + (1160 / MyGame.HumanPlayer.PlayerHand.Count() * index), 12);
-            }
+            this.CreatePlayerCardsGUI();
+
             // TRIGGER ATTACKERS CARD SELECTION METHOD
             // If computer is attacker, their method to play a turn should be called here 
             // else players turn will commence
@@ -323,27 +301,45 @@ namespace DurakGuiTester
         /// <param name="e"></param>
         private void btnEndTurn_Click(object sender, EventArgs e)
         {
+            //// TERSTING PURPOSES WITHOUT AIPLAYER
+            if (MessageBox.Show("Who is ending turn?", "Click YES for human, NO for cpu", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                // Player is passing
+                MyGame.HumanPlayer.IsPassing = true;
+            }
+            else
+            {
+                // Computer is passing
+                MyGame.HumanPlayer.IsPassing = true;
+            }
             //Human or computer fails to defend
             if (MyGame.PlayedCards.Count == 0)
             {
                 //A card must be played
                 MessageBox.Show("No cards have been played yet, you must play at least 1 card!");
             }
-            // CHECK IF COMPUTER HAS PASSED WHICH MEANS PLAYER HAS WON THIS ROUND
-            else if (myGame.ComputerPlayer.IsPassing)
+            else
             {
-                // If the computer has passed that means that the computer has 
-                // lost and will be picking up cards
-
-                //Add played cards to hand, call PickUpPlayedCards()
-                MyGame.ComputerPlayer.PickUpCards(this.PickUpPlayedCards());
-                
-            }
-            // CHECK IF COMPUTER HASN'T PASSED WHICH MEANS PLAYER HAS LOST THIS ROUND
-            else if (!MyGame.ComputerPlayer.IsPassing)
-            {
-                // TO BE REMOVED ONCE AIPLAYER WORKING
-                MyGame.HumanPlayer.PickUpCards(this.PickUpPlayedCards());
+                // CHECK IF COMPUTER HAS PASSED WHICH MEANS PLAYER HAS WON THIS ROUND
+                if (myGame.ComputerPlayer.IsPassing && !MyGame.HumanPlayer.IsPassing)
+                {         
+                    //Add played cards to hand, call PickUpPlayedCards()
+                    MyGame.ComputerPlayer.PickUpCards(this.PickUpPlayedCards());
+                    MessageBox.Show("(HUMAN)You have won this round!!");
+                    this.EndRound();
+                }
+                // CHECK IF HUMAN HAS PASSED WHICH MEANS COMPUTER HAS WON THIS ROUND
+                else if (myGame.HumanPlayer.IsPassing && !MyGame.ComputerPlayer.IsPassing)
+                {               
+                    //Add played cards to hand, call PickUpPlayedCards()
+                    MyGame.HumanPlayer.PickUpCards(this.PickUpPlayedCards());
+                    MessageBox.Show("(CPU)You have won this round!!");
+                    this.EndRound();
+                }
+                #region TO BE USED WHEN AI WORKING
+                // CHECK IF COMPUTER HASN'T PASSED WHICH MEANS PLAYER HAS LOST THIS ROUND
+                //else if (!MyGame.ComputerPlayer.IsPassing)
+                //{                   
 
                 //// COMPUTER MAY CONTINUE PLAYING
                 //while(!MyGame.ComputerPlayer.IsPassing)
@@ -368,20 +364,31 @@ namespace DurakGuiTester
 
                 //    // isPassing SHOULD BE SET INSIDE THE AIPLAYER TURN LOGIC
                 //}
-                
+
                 //Add played cards to hand
 
+                //}
+                #endregion
             }
 
-            // Remove the played cards from the GUI
-            // TODO...
+            //MessageBox.Show("We will now clear the cards");
+            //// Remove the played cards from the GUI
+            //// TODO...
+            //pnlPlayArea.Controls.Clear();
 
-            //Deal cards to fill remaining spots
-            MyGame.DealCards();
-            //Clear played cards
-            MyGame.PlayedCards.Clear();
-            MyGame.PlayedCards.HumanLastCardPlayed = null;
-            MyGame.PlayedCards.ComputerLastCardPlayed = null;
+            //// Remove the played cards from the GAME
+            //MyGame.PlayedCards.Clear();
+            //MyGame.PlayedCards.HumanLastCardPlayed = null;
+            //MyGame.PlayedCards.ComputerLastCardPlayed = null;
+
+            ////Deal cards to fill remaining spots
+            //MyGame.DealCards();
+
+            //// CLEAR PLAYER PANELS TO DO A REFRESH WITH THE NEW CARDS, JUST EASIER THAN TRYING TO UPDATE
+            //pnlOpponent.Controls.Clear();
+            //pnlPlayer.Controls.Clear();
+            //// Add the newly dealt cards to the player panels
+            //this.CreatePlayerCardsGUI();
         }
         
         #endregion
@@ -401,6 +408,60 @@ namespace DurakGuiTester
             return returnCards;
         }
 
+
+        public void CreatePlayerCardsGUI()
+        {
+            // NEED TO POPULATE PLAYERS CARDS IN THE FORM HERE
+            //Display hands
+            //Player
+            for (int index = 0; index < MyGame.HumanPlayer.PlayerHand.Count(); index++)
+            {
+                CardUserControl.CardUserControl handCard = new CardUserControl.CardUserControl();
+                handCard.Card = MyGame.HumanPlayer.PlayerHand.ElementAt(index);
+                handCard.FaceUp = true;
+                handCard.Click += new EventHandler(handCard_Click);
+                pnlPlayer.Controls.Add(handCard);
+                handCard.BringToFront();
+                handCard.Location = new Point((580 / MyGame.HumanPlayer.PlayerHand.Count()) + (1160 / MyGame.HumanPlayer.PlayerHand.Count() * index), 12);
+            }
+            //CPU
+            for (int index = 0; index < MyGame.ComputerPlayer.PlayerHand.Count(); index++)
+            {
+                CardUserControl.CardUserControl handCard = new CardUserControl.CardUserControl();
+                handCard.Card = MyGame.ComputerPlayer.PlayerHand.ElementAt(index);
+                handCard.FaceUp = true; //Remove after debugging
+                handCard.Click += new EventHandler(handCard_Click);
+                handCard.Enabled = true;
+                pnlOpponent.Controls.Add(handCard);
+                handCard.BringToFront();
+                handCard.Location = new Point((580 / MyGame.ComputerPlayer.PlayerHand.Count()) + (1160 / MyGame.HumanPlayer.PlayerHand.Count() * index), 12);
+            }
+        }
+        
+        
+        public void EndRound()
+        {
+            MessageBox.Show("We will now clear the cards");
+            // Remove the played cards from the GUI
+            // TODO...
+            pnlPlayArea.Controls.Clear();
+
+            // Remove the played cards from the GAME
+            MyGame.PlayedCards.Clear();
+            MyGame.PlayedCards.HumanLastCardPlayed = null;
+            MyGame.PlayedCards.ComputerLastCardPlayed = null;
+
+            //Deal cards to fill remaining spots
+            MyGame.DealCards();
+
+            // CLEAR PLAYER PANELS TO DO A REFRESH WITH THE NEW CARDS, JUST EASIER THAN TRYING TO UPDATE
+            pnlOpponent.Controls.Clear();
+            pnlPlayer.Controls.Clear();
+            // Add the newly dealt cards to the player panels
+            this.CreatePlayerCardsGUI();
+        }
+        
+        
         #endregion
     }
 }

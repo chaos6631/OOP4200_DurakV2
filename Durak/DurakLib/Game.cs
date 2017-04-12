@@ -165,7 +165,7 @@ namespace DurakGameLib
                 if (IsHumanAttacker())
                 {
                     //// human is attacker     
-                    if (HumanPlayer.IsPlayable)
+                    if (!HumanPlayer.IsPassing)
                     {
                         if (!PlayerTurn(HumanPlayer))
                         {
@@ -177,7 +177,7 @@ namespace DurakGameLib
                 else
                 {
                     //// copmuter is attacker   
-                    if (ComputerPlayer.IsPlayable)
+                    if (!ComputerPlayer.IsPassing)
                     {
                         if (!PlayerTurn(ComputerPlayer))
                         {
@@ -398,16 +398,35 @@ namespace DurakGameLib
             else
             {                         
                 //// Deal to attacker first
-                if (HumanPlayer.IsAttacker)
-                    for (int i = ComputerPlayer.PlayerHand.Count; i <= INITIAL_PLAYER_CARD_COUNT; i++)
+                if (ComputerPlayer.IsAttacker)
+                {
+                    // Deal to computer 
+                    for (int i = ComputerPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT; i++)
                     {
                         ComputerPlayer.TakeFromDeck(GameDeck.GetCard());
                     }
-                else
-                    for (int i = HumanPlayer.PlayerHand.Count; i <= INITIAL_PLAYER_CARD_COUNT; i++)
+                    // Deal to Human
+                    for (int i = HumanPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT; i++)
                     {
                         HumanPlayer.TakeFromDeck(GameDeck.GetCard());
                     }
+
+                }         
+                else if(HumanPlayer.IsAttacker)
+                {
+                    // Deal to Human
+                    for (int i = HumanPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT; i++)
+                    {
+                        HumanPlayer.TakeFromDeck(GameDeck.GetCard());
+                    }
+                    // Deal to computer 
+                    for (int i = ComputerPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT; i++)
+                    {
+                        ComputerPlayer.TakeFromDeck(GameDeck.GetCard());
+                    }
+
+                }
+                    
             }
         }
         
