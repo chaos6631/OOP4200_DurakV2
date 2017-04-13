@@ -202,9 +202,7 @@ namespace DurakGuiTester
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void lblCardsRemainingDisplay_TextChanged(object sender, EventArgs e)
-        {
-            
-            
+        {           
             if (lblCardsRemainingDisplay.Text == "0")
             {
                 cardTopDeck.Visible = false;
@@ -430,6 +428,7 @@ namespace DurakGuiTester
                 if (MyGame.HumanPlayer.IsAttacker)
                 {
                     lblPlayerRole.Text = "Attacker";
+                    CurrentPlayer = MyGame.HumanPlayer;
                 }
                 else
                 {
@@ -445,12 +444,12 @@ namespace DurakGuiTester
                 handCard.Click += new EventHandler(handCard_Click);
                 handCard.Enabled = true;
                 pnlOpponent.Controls.Add(handCard);
-                handCard.BringToFront();
-                lblOpponentName.Text = MyGame.ComputerPlayer.PlayerHand.Count().ToString();
+                handCard.BringToFront();                
                 handCard.Location = new Point((580 / MyGame.ComputerPlayer.PlayerHand.Count()) + (1160 / MyGame.ComputerPlayer.PlayerHand.Count() * index), 12);
                 if (MyGame.ComputerPlayer.IsAttacker)
                 {
                     lblOpponentRole.Text = "Attacker";
+                    CurrentPlayer = MyGame.ComputerPlayer;
                 }
                 else
                 {
@@ -491,12 +490,27 @@ namespace DurakGuiTester
                 trumpTaken = true;
             }
             
+            //SWAP PLAYER ROLES IF DEFENSE WINS
 
             // CLEAR PLAYER PANELS TO DO A REFRESH WITH THE NEW CARDS, JUST EASIER THAN TRYING TO UPDATE
             pnlOpponent.Controls.Clear();
             pnlPlayer.Controls.Clear();
             // Add the newly dealt cards to the player panels
             this.CreatePlayerCardsGUI();
+
+            //Check if game is over
+            if (trumpTaken == true && MyGame.HumanPlayer.PlayerHand.Count == 0)
+            {
+                MyGame.ComputerPlayer.IsDurak = true;
+                MessageBox.Show(MyGame.ComputerPlayer.PlayerName.ToString() + " is the Durak");
+                MyGame.EndGame();
+            }
+            else if (trumpTaken == true && MyGame.ComputerPlayer.PlayerHand.Count == 0)
+            {
+                MyGame.HumanPlayer.IsDurak = true;
+                MessageBox.Show(MyGame.HumanPlayer.PlayerName.ToString() + " is the Durak");
+                MyGame.EndGame();
+            }
         }
         
         
