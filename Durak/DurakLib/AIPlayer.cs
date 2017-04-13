@@ -78,22 +78,27 @@ namespace DurakGameLib
         /// <param name="card"></param>
         /// <param name="eatnCard"></param>
         /// <returns></returns>
-        public Card FindeatnCard(Card card, Card eatnCard)
+        public bool FindeatnCard(Card card, Card eatnCard)
         {
+            bool pickUp = false;
+
             if (card.Rank == Rank.Ace)
             {
                 eatnCard = card;
+                pickUp = true;
             }
             else if (card.Rank == Rank.King)
             {
                 eatnCard = card;
+                pickUp = true;
             }
             else if (card.Rank == Rank.Queen)
             {
                 eatnCard = card;
+                pickUp = true;
             }
 
-            return eatnCard;
+            return pickUp;
 
         }
         /// <summary>
@@ -185,8 +190,8 @@ namespace DurakGameLib
                 Boolean aiLoses = true;
                 Card cardToPlay = new Card();
 
-                Card cardEatn = new Card();
-                cardEatn = FindeatnCard(humanLastCard, cardEatn);//find eatn card from human last card.
+                bool cardEatn ;
+                cardEatn = FindeatnCard(humanLastCard, cardToPlay);//find eatn card from human last card.
 
                 foreach (Card aicard in PlayerHand)
                 {
@@ -218,7 +223,7 @@ namespace DurakGameLib
                 }
                 else
                 {   
-                    if(cardEatn != null)
+                    if(cardEatn == true)
                     {
                         TakeFromDeck(humanLastCard);
                     }
