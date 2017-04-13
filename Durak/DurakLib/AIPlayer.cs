@@ -53,7 +53,7 @@ namespace DurakGameLib
         public Card FindMinimumCard(Card card, Card minimumCard)
         {
 
-            if (card < minimumCard)
+            if (card < minimumCard && card.Suit == minimumCard.Suit)
             {
                 minimumCard = card;
             }
@@ -62,12 +62,13 @@ namespace DurakGameLib
         }
 
         /// <summary>
-        /// find eatncard for ai from human last card
+        /// find highest for ai from human last card
+        /// this is what this method should find, change needs to be made
         /// </summary>
         /// <param name="card"></param>
         /// <param name="eatnCard"></param>
         /// <returns></returns>
-        public bool FindeatnCard(Card card, Card eatnCard)
+        public bool FindHighestCard(Card card, Card eatnCard)
         {
             bool pickUp = false;
 
@@ -180,7 +181,7 @@ namespace DurakGameLib
                 Card cardToPlay = new Card();
 
                 bool cardEatn ;
-                cardEatn = FindeatnCard(humanLastCard, cardToPlay);//find eatn card from human last card.
+                cardEatn = FindHighestCard(humanLastCard, cardToPlay);//find highest card from human last card.
 
                 foreach (Card aicard in PlayerHand)
                 {
