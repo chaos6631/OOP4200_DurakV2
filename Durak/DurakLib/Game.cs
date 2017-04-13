@@ -39,6 +39,7 @@ namespace DurakGameLib
             this.computerPlayer = new Player(); // NEEDS TO BE CHNAGED TO AIPLAYER WHEN CONSTRUCTOR IS CREATED
             //this.ComputerPlayer.PlayerName = computerName;
             this.playedCards = new CardsPlayed();
+            this.gameTrumpCard = new Card();
         }
         #endregion
 
@@ -401,26 +402,28 @@ namespace DurakGameLib
                 if (ComputerPlayer.IsAttacker)
                 {
                     // Deal to computer 
-                    for (int i = ComputerPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT; i++)
+                    for (int i = ComputerPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT && GameDeck.RemainingCardCount() > 0; i++)
                     {
-                        ComputerPlayer.TakeFromDeck(GameDeck.GetCard());
+                        ComputerPlayer.TakeFromDeck(GameDeck.GetCard());                       
                     }
                     // Deal to Human
-                    for (int i = HumanPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT; i++)
+                    for (int i = HumanPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT && GameDeck.RemainingCardCount() > 0; i++)
                     {
                         HumanPlayer.TakeFromDeck(GameDeck.GetCard());
                     }
+                    
+                    
 
                 }         
                 else if(HumanPlayer.IsAttacker)
                 {
                     // Deal to Human
-                    for (int i = HumanPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT; i++)
+                    for (int i = HumanPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT && GameDeck.RemainingCardCount() > 0; i++)
                     {
                         HumanPlayer.TakeFromDeck(GameDeck.GetCard());
                     }
                     // Deal to computer 
-                    for (int i = ComputerPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT; i++)
+                    for (int i = ComputerPlayer.PlayerHand.Count; i < INITIAL_PLAYER_CARD_COUNT && GameDeck.RemainingCardCount() > 0; i++)
                     {
                         ComputerPlayer.TakeFromDeck(GameDeck.GetCard());
                     }

@@ -21,6 +21,7 @@ namespace DurakGuiTester
         private int talonSize;        // this should be set in forms constructor, value is passed by frmStartup
         private DurakGameLib.Game myGame;
         private Player currentPlayer;
+        private bool trumpTaken = false; //flag tripped if the trump card is drawn as the last card
         #endregion
 
         #region ACCESSORS & MUTATORS
@@ -203,11 +204,7 @@ namespace DurakGuiTester
         private void lblCardsRemainingDisplay_TextChanged(object sender, EventArgs e)
         {
             
-            //if ()
-            //{
-                //cardTopDeck.Visible = false;
-            //}
-            //For testing
+            
             if (lblCardsRemainingDisplay.Text == "0")
             {
                 cardTopDeck.Visible = false;
@@ -244,7 +241,7 @@ namespace DurakGuiTester
                 }
                 else // Card is NOT playable player must choose different card or pass
                 {
-                    MessageBox.Show("This card is not playable, pleas pick a card with a higher value than last card played!!");
+                    MessageBox.Show("This card is not playable, please pick a card with a higher value than last card played!!");
                 }
             }
             //// Computers turn
@@ -268,7 +265,7 @@ namespace DurakGuiTester
                 }
                 else // Card is NOT playable player must choose different card or pass
                 {
-                    MessageBox.Show("This card is not playable, pleas pick a card with a higher value than last card played!!");
+                    MessageBox.Show("This card is not playable, please pick a card with a higher value than last card played!!");
                 }
             }
 
@@ -310,7 +307,7 @@ namespace DurakGuiTester
             else
             {
                 // Computer is passing
-                MyGame.HumanPlayer.IsPassing = true;
+                MyGame.ComputerPlayer.IsPassing = true;
             }
             //Human or computer fails to defend
             if (MyGame.PlayedCards.Count == 0)
@@ -322,18 +319,24 @@ namespace DurakGuiTester
             {
                 // CHECK IF COMPUTER HAS PASSED WHICH MEANS PLAYER HAS WON THIS ROUND
                 if (myGame.ComputerPlayer.IsPassing && !MyGame.HumanPlayer.IsPassing)
-                {         
-                    //Add played cards to hand, call PickUpPlayedCards()
-                    MyGame.ComputerPlayer.PickUpCards(this.PickUpPlayedCards());
+                {                             
                     MessageBox.Show("(HUMAN)You have won this round!!");
+                    if (MyGame.ComputerPlayer.IsAttacker == false)
+                    {
+                        //Add played cards to hand, call PickUpPlayedCards()
+                        MyGame.ComputerPlayer.PickUpCards(this.PickUpPlayedCards());
+                    }                   
                     this.EndRound();
                 }
                 // CHECK IF HUMAN HAS PASSED WHICH MEANS COMPUTER HAS WON THIS ROUND
                 else if (myGame.HumanPlayer.IsPassing && !MyGame.ComputerPlayer.IsPassing)
-                {               
-                    //Add played cards to hand, call PickUpPlayedCards()
-                    MyGame.HumanPlayer.PickUpCards(this.PickUpPlayedCards());
+                {                                  
                     MessageBox.Show("(CPU)You have won this round!!");
+                    if(MyGame.HumanPlayer.IsAttacker == false)
+                    {
+                        //Add played cards to hand, call PickUpPlayedCards()
+                        MyGame.HumanPlayer.PickUpCards(this.PickUpPlayedCards());
+                    }
                     this.EndRound();
                 }
                 #region TO BE USED WHEN AI WORKING
@@ -422,7 +425,16 @@ namespace DurakGuiTester
                 handCard.Click += new EventHandler(handCard_Click);
                 pnlPlayer.Controls.Add(handCard);
                 handCard.BringToFront();
+                //Refresh role
                 handCard.Location = new Point((580 / MyGame.HumanPlayer.PlayerHand.Count()) + (1160 / MyGame.HumanPlayer.PlayerHand.Count() * index), 12);
+                if (MyGame.HumanPlayer.IsAttacker)
+                {
+                    lblPlayerRole.Text = "Attacker";
+                }
+                else
+                {
+                    lblPlayerRole.Text = "Defender";
+                }
             }
             //CPU
             for (int index = 0; index < MyGame.ComputerPlayer.PlayerHand.Count(); index++)
@@ -434,7 +446,16 @@ namespace DurakGuiTester
                 handCard.Enabled = true;
                 pnlOpponent.Controls.Add(handCard);
                 handCard.BringToFront();
-                handCard.Location = new Point((580 / MyGame.ComputerPlayer.PlayerHand.Count()) + (1160 / MyGame.HumanPlayer.PlayerHand.Count() * index), 12);
+                lblOpponentName.Text = MyGame.ComputerPlayer.PlayerHand.Count().ToString();
+                handCard.Location = new Point((580 / MyGame.ComputerPlayer.PlayerHand.Count()) + (1160 / MyGame.ComputerPlayer.PlayerHand.Count() * index), 12);
+                if (MyGame.ComputerPlayer.IsAttacker)
+                {
+                    lblOpponentRole.Text = "Attacker";
+                }
+                else
+                {
+                    lblOpponentRole.Text = "Defender";
+                }
             }
         }
         
@@ -445,6 +466,9 @@ namespace DurakGuiTester
             // Remove the played cards from the GUI
             // TODO...
             pnlPlayArea.Controls.Clear();
+            //Remove passing status
+            MyGame.HumanPlayer.IsPassing = false;
+            MyGame.ComputerPlayer.IsPassing = false;
 
             // Remove the played cards from the GAME
             MyGame.PlayedCards.Clear();
@@ -453,6 +477,20 @@ namespace DurakGuiTester
 
             //Deal cards to fill remaining spots
             MyGame.DealCards();
+            lblCardsRemainingDisplay.Text = MyGame.GameDeck.RemainingCardCount().ToString();
+
+            //Draw trump if talon is empty
+            if (MyGame.GameDeck.RemainingCardCount() == 0 && MyGame.HumanPlayer.PlayerHand.Count() < 6 && trumpTaken == false)//replace with variable
+            {
+                MyGame.HumanPlayer.TakeFromDeck(MyGame.GameTrumpCard);
+                trumpTaken = true;
+            }
+            else if (MyGame.GameDeck.RemainingCardCount() == 0 && MyGame.ComputerPlayer.PlayerHand.Count() < 6 && trumpTaken == false)//replace with variable
+            {
+                MyGame.ComputerPlayer.TakeFromDeck(MyGame.GameTrumpCard);
+                trumpTaken = true;
+            }
+            
 
             // CLEAR PLAYER PANELS TO DO A REFRESH WITH THE NEW CARDS, JUST EASIER THAN TRYING TO UPDATE
             pnlOpponent.Controls.Clear();

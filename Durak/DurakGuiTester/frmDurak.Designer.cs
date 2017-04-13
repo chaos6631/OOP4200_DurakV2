@@ -42,8 +42,6 @@
             this.lblOpponentName = new System.Windows.Forms.Label();
             this.lblPlayerName = new System.Windows.Forms.Label();
             this.btnEndTurn = new System.Windows.Forms.Button();
-            this.pnlOpponent.SuspendLayout();
-            this.pnlPlayer.SuspendLayout();
             this.pnlDeckArea.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,7 +49,6 @@
             // 
             this.pnlOpponent.BackgroundImage = global::DurakGuiTester.Properties.Resources.Borders;
             this.pnlOpponent.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pnlOpponent.Controls.Add(this.lblOpponentRole);
             this.pnlOpponent.Location = new System.Drawing.Point(0, 0);
             this.pnlOpponent.Name = "pnlOpponent";
             this.pnlOpponent.Size = new System.Drawing.Size(1184, 120);
@@ -61,7 +58,7 @@
             // 
             this.lblOpponentRole.AutoSize = true;
             this.lblOpponentRole.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblOpponentRole.Location = new System.Drawing.Point(543, 105);
+            this.lblOpponentRole.Location = new System.Drawing.Point(543, 123);
             this.lblOpponentRole.Name = "lblOpponentRole";
             this.lblOpponentRole.Size = new System.Drawing.Size(98, 15);
             this.lblOpponentRole.TabIndex = 3;
@@ -72,7 +69,6 @@
             // 
             this.pnlPlayer.BackgroundImage = global::DurakGuiTester.Properties.Resources.Borders;
             this.pnlPlayer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pnlPlayer.Controls.Add(this.lblPlayerRole);
             this.pnlPlayer.Location = new System.Drawing.Point(0, 562);
             this.pnlPlayer.Name = "pnlPlayer";
             this.pnlPlayer.Size = new System.Drawing.Size(1184, 120);
@@ -82,7 +78,7 @@
             // 
             this.lblPlayerRole.AutoSize = true;
             this.lblPlayerRole.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblPlayerRole.Location = new System.Drawing.Point(543, 0);
+            this.lblPlayerRole.Location = new System.Drawing.Point(543, 544);
             this.lblPlayerRole.Name = "lblPlayerRole";
             this.lblPlayerRole.Size = new System.Drawing.Size(98, 15);
             this.lblPlayerRole.TabIndex = 4;
@@ -163,7 +159,7 @@
             // 
             this.lblPlayerName.AutoSize = true;
             this.lblPlayerName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblPlayerName.Location = new System.Drawing.Point(561, 535);
+            this.lblPlayerName.Location = new System.Drawing.Point(554, 526);
             this.lblPlayerName.Name = "lblPlayerName";
             this.lblPlayerName.Size = new System.Drawing.Size(69, 15);
             this.lblPlayerName.TabIndex = 5;
@@ -188,6 +184,8 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1184, 681);
+            this.Controls.Add(this.lblPlayerRole);
+            this.Controls.Add(this.lblOpponentRole);
             this.Controls.Add(this.btnEndTurn);
             this.Controls.Add(this.lblPlayerName);
             this.Controls.Add(this.lblOpponentName);
@@ -198,10 +196,6 @@
             this.Name = "frmDurak";
             this.Text = "Durak";
             this.Load += new System.EventHandler(this.frmDurak_Load);
-            this.pnlOpponent.ResumeLayout(false);
-            this.pnlOpponent.PerformLayout();
-            this.pnlPlayer.ResumeLayout(false);
-            this.pnlPlayer.PerformLayout();
             this.pnlDeckArea.ResumeLayout(false);
             this.pnlDeckArea.PerformLayout();
             this.ResumeLayout(false);
