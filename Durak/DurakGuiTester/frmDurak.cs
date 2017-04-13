@@ -324,7 +324,7 @@ namespace DurakGuiTester
                         //Add played cards to hand, call PickUpPlayedCards()
                         MyGame.ComputerPlayer.PickUpCards(this.PickUpPlayedCards());
                     }                   
-                    this.EndRound();
+                    this.EndRound(myGame.HumanPlayer, myGame.ComputerPlayer);
                 }
                 // CHECK IF HUMAN HAS PASSED WHICH MEANS COMPUTER HAS WON THIS ROUND
                 else if (myGame.HumanPlayer.IsPassing && !MyGame.ComputerPlayer.IsPassing)
@@ -335,7 +335,7 @@ namespace DurakGuiTester
                         //Add played cards to hand, call PickUpPlayedCards()
                         MyGame.HumanPlayer.PickUpCards(this.PickUpPlayedCards());
                     }
-                    this.EndRound();
+                    this.EndRound(myGame.ComputerPlayer, myGame.HumanPlayer);
                 }
                 #region TO BE USED WHEN AI WORKING
                 // CHECK IF COMPUTER HASN'T PASSED WHICH MEANS PLAYER HAS LOST THIS ROUND
@@ -459,7 +459,7 @@ namespace DurakGuiTester
         }
         
         
-        public void EndRound()
+        public void EndRound(Player winner, Player loser)
         {
             MessageBox.Show("We will now clear the cards");
             // Remove the played cards from the GUI
@@ -489,8 +489,10 @@ namespace DurakGuiTester
                 MyGame.ComputerPlayer.TakeFromDeck(MyGame.GameTrumpCard);
                 trumpTaken = true;
             }
-            
+
             //SWAP PLAYER ROLES IF DEFENSE WINS
+            winner.IsAttacker = true;
+            loser.IsAttacker = false;
 
             // CLEAR PLAYER PANELS TO DO A REFRESH WITH THE NEW CARDS, JUST EASIER THAN TRYING TO UPDATE
             pnlOpponent.Controls.Clear();
