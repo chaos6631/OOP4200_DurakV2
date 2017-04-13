@@ -93,7 +93,7 @@ namespace DurakGameLib
         /// <summary>
         /// basic logic of ai player
         /// </summary>
-        public void BasicAILogic(Card humanLastCard)
+        public Card BasicAILogic(Card humanLastCard)
         {
             
             Card minimumCard = new Card();
@@ -152,7 +152,7 @@ namespace DurakGameLib
                 }
 
             }
-
+            return cardToPlay;
         }
 
         public void AdvancedAILogic(Card humanLastCard)
@@ -223,6 +223,7 @@ namespace DurakGameLib
 
             }
         }
+                
 
         }
         #endregion

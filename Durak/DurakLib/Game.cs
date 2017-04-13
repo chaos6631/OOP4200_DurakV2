@@ -17,6 +17,16 @@ namespace DurakGameLib
         static int[] DECK_SIZES = { 20, 36, 52 };        // Deck sizes
         static int INITIAL_PLAYER_CARD_COUNT = 6;       // Initial player card amount
         #endregion
+               
+        #region INSTANCE MEMBERS
+        //private Dictionary<string, Player> players;
+        private Player humanPlayer;
+        private AIPlayer computerPlayer;
+        private Talon gameDeck;
+        private Card gameTrumpCard;
+        private CardsPlayed playedCards;
+        private bool continueGame;
+        #endregion
 
         #region CONSTRUCTORS
         /// <summary>
@@ -24,7 +34,6 @@ namespace DurakGameLib
         /// </summary>
         public Game()
         {
-            //this.players = new Dictionary<string, Player>();
 
         }
         /// <summary>
@@ -41,16 +50,6 @@ namespace DurakGameLib
             this.playedCards = new CardsPlayed();
             this.gameTrumpCard = new Card();
         }
-        #endregion
-
-        #region INSTANCE MEMBERS
-        //private Dictionary<string, Player> players;
-        private Player humanPlayer;
-        private Player computerPlayer;
-        private Talon gameDeck;
-        private Card gameTrumpCard;
-        private CardsPlayed playedCards;
-        private bool continueGame;
         #endregion
 
         #region ACCESSORS & MUTATORS
@@ -73,7 +72,7 @@ namespace DurakGameLib
         /// <summary>
         /// Public property for computerPlayer
         /// </summary>   
-        public Player ComputerPlayer
+        public AIPlayer ComputerPlayer
         {
             get
             {
