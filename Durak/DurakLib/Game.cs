@@ -36,7 +36,7 @@ namespace DurakGameLib
         {
             this.humanPlayer = new Player(humanName);
             //this.HumanPlayer.PlayerName = humanName;
-            this.computerPlayer = new Player(computerName); // NEEDS TO BE CHNAGED TO AIPLAYER WHEN CONSTRUCTOR IS CREATED
+            this.computerPlayer = new AIPlayer();
             //this.ComputerPlayer.PlayerName = computerName;
             this.playedCards = new CardsPlayed();
             this.gameTrumpCard = new Card();

@@ -15,6 +15,11 @@ namespace DurakGameLib
 
         #endregion
 
+        #region INSTANCE MEMBERS
+        private Suit trumpCardSuit;
+
+        #endregion
+        
         #region CONSTRUCTORS
 
         /// <summary>
@@ -26,36 +31,20 @@ namespace DurakGameLib
         }
         #endregion
 
-        #region INSTANCE MEMBERS
-        private Suit trumpCardSuit;
-        private Card humanLastCard;
-
-        #endregion
-
         #region ACCESSORS & MUTATORS
-
-        #endregion
-
-        #region METHODS
 
         /// <summary>
         /// Getter & Setter from Trump Card Suit
         /// </summary>
         public Suit TrumpCardSuit
         {
-            get { return trumpCardSuit; } 
-            set { trumpCardSuit = value; } 
+            get { return trumpCardSuit; }
+            set { trumpCardSuit = value; }
         }
 
-        /// <summary>
-        /// Getter & Setter for the human's last card
-        /// </summary>
-        public Card HumanLastCard
-        {
-            get { return humanLastCard; }
+        #endregion
 
-            set { humanLastCard = value; }
-        }
+        #region METHODS
 
         /// <summary>
         /// Returns the minimun card.
@@ -104,7 +93,7 @@ namespace DurakGameLib
         /// <summary>
         /// basic logic of ai player
         /// </summary>
-        public void BasicAILogic()
+        public void BasicAILogic(Card humanLastCard)
         {
             
             Card minimumCard = new Card();
@@ -166,7 +155,7 @@ namespace DurakGameLib
 
         }
 
-        public void AdvancedAILogic()
+        public void AdvancedAILogic(Card humanLastCard)
         {
             if (IsAttacker == true)
             {
